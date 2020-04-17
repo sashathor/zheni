@@ -1,0 +1,24 @@
+{
+  "name": "Zheni - gastby online shop",
+  "description": "Online shop based on gatsby with integration to contentful and stripe",
+  "keywords": [
+    "contentful",
+    "gatsby",
+    "react",
+    "graphql",
+    "static",
+    "ssg",
+    "stripe",
+    "shop"
+  ],
+  "repository": "https://github.com/axminze/zheni",
+  "success_url": "/",
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    },
+    {
+      "url": "https://github.com/heroku/heroku-buildpack-static"
+    }
+  ]
+}

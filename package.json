@@ -1,0 +1,59 @@
+{
+  "name": "zheni",
+  "description": "Zheni - gastby online shop",
+  "private": true,
+  "version": "0.0.1",
+  "author": "Alexander Schwarzman <axminze@gmail.com>",
+  "bugs": {
+    "url": "https://github.com/axminze/zheni/issues"
+  },
+  "dependencies": {
+    "@contentful/rich-text-react-renderer": "^13.4.0",
+    "@emotion/core": "^10.0.28",
+    "@emotion/styled": "^10.0.27",
+    "@stripe/stripe-js": "^1.4.0",
+    "gatsby": "^2.19.1",
+    "gatsby-background-image": "^1.1.1",
+    "gatsby-image": "^2.0.13",
+    "gatsby-plugin-emotion": "^4.2.3",
+    "gatsby-plugin-prefetch-google-fonts": "^1.4.3",
+    "gatsby-plugin-react-helmet": "^3.0.0",
+    "gatsby-plugin-theme-ui": "^0.3.0",
+    "gatsby-source-contentful": "^2.1.78",
+    "gatsby-source-stripe": "^3.0.7",
+    "gatsby-transformer-remark": "^2.1.6",
+    "gh-pages": "^2.0.1",
+    "lodash": "^4.17.11",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "react-helmet": "^5.2.0",
+    "react-images": "^1.1.7",
+    "theme-ui": "^0.3.1"
+  },
+  "homepage": "https://github.com/axminze/zheni#readme",
+  "keywords": [
+    "gatsby",
+    "contentful",
+    "stripe",
+    "react",
+    "graphql",
+    "shop"
+  ],
+  "license": "MIT",
+  "main": "n/a",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/axminze/zheni.git"
+  },
+  "scripts": {
+    "dev": "gatsby develop",
+    "format": "prettier --write src/**/*.{js,jsx}",
+    "build": "gatsby build",
+    "heroku-postbuild": "gatsby build",
+    "serve": "gatsby serve",
+    "setup": "npm install --no-save contentful-import yargs-parser axios chalk && node ./setup.js"
+  },
+  "devDependencies": {
+    "prettier": "^2.0.5"
+  }
+}
