@@ -6,7 +6,8 @@ import ShopContext from '../context/shop-context';
 const stripePromise = loadStripe(process.env.STRIPE_PUBLISHABLE_KEY);
 
 const useCart = () => {
-  const { state, dispatch } = useContext(ShopContext);
+  // TODO: investigate weird behavior of state during the build
+  const { state = { shoppingCart: {} }, dispatch } = useContext(ShopContext);
 
   const addToCart = (payload) => {
     dispatch({ type: 'ADD_TO_CART', payload });
@@ -20,7 +21,7 @@ const useCart = () => {
     dispatch({ type: 'CLEAR_CART' });
   };
 
-  const isCartContains = (sku) => state.shoppingCart[sku];
+  const isCartContains = (sku) => state && state.shoppingCart[sku];
 
   const redirectToCheckout = async (event, items) => {
     event.preventDefault();

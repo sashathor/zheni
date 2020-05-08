@@ -1,7 +1,12 @@
 import React, { createContext, useReducer } from 'react';
 
+const getShoppingCartFromLocalStorage = () =>
+  typeof window !== 'undefined'
+    ? window.localStorage.getItem('shoppingCart')
+    : null;
+
 const shopContextValues = {
-  shoppingCart: JSON.parse(localStorage.getItem('shoppingCart')) || {},
+  shoppingCart: JSON.parse(getShoppingCartFromLocalStorage()) || {},
 };
 
 const shopReducer = (state, { type, payload }) => {
@@ -29,7 +34,7 @@ const shopReducer = (state, { type, payload }) => {
       localStorage.removeItem('shoppingCart');
       return { ...state, shoppingCart };
     default:
-      return shoppingCart;
+      return state;
   }
 };
 
