@@ -1,10 +1,5 @@
 import { useContext } from 'react';
-import { loadStripe } from '@stripe/stripe-js';
-
 import ShopContext from '../context/shop-context';
-
-console.log(process.env.GATSBY_STRIPE_PUBLISHABLE_KEY);
-console.log(process.env.GATSBY_CONTENTFUL_SPACE_ID);
 
 const useCart = () => {
   // TODO: investigate weird behavior of state during the build
@@ -25,9 +20,9 @@ const useCart = () => {
   const isCartContains = (sku) => state && state.shoppingCart[sku];
 
   const redirectToCheckout = async (event, items) => {
-    console.log(process.env.GATSBY_STRIPE_PUBLISHABLE_KEY);
-    console.log(process.env.GATSBY_CONTENTFUL_SPACE_ID);
     event.preventDefault();
+    const loadStripe = await require('@stripe/stripe-js').loadStripe;
+
     const stripe = await loadStripe(process.env.GATSBY_STRIPE_PUBLISHABLE_KEY);
 
     const { error } = await stripe.redirectToCheckout({
