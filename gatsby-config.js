@@ -11,9 +11,10 @@ try {
 
 // Overwrite the Contentful config with environment variables if they exist
 contentfulConfig = {
-  spaceId: process.env.CONTENTFUL_SPACE_ID || contentfulConfig.spaceId,
+  spaceId: process.env.GATSBY_CONTENTFUL_SPACE_ID || contentfulConfig.spaceId,
   accessToken:
-    process.env.CONTENTFUL_DELIVERY_TOKEN || contentfulConfig.accessToken,
+    process.env.GATSBY_CONTENTFUL_DELIVERY_TOKEN ||
+    contentfulConfig.accessToken,
 };
 
 const { spaceId, accessToken } = contentfulConfig;
@@ -40,7 +41,7 @@ module.exports = {
       resolve: `gatsby-source-stripe`,
       options: {
         objects: ['Sku'],
-        secretKey: process.env.STRIPE_SECRET_KEY,
+        secretKey: process.env.GATSBY_STRIPE_SECRET_KEY,
         downloadFiles: false,
       },
     },
@@ -65,20 +66,5 @@ module.exports = {
         ],
       },
     },
-    // {
-    //   resolve: '@contentful/gatsby-transformer-contentful-richtext',
-    //   options: {
-    //     renderOptions: {
-    //       renderNode: {
-    //         [BLOCKS.HEADING_4]: (node, next) => (
-    //           <Heading as="h4">{next(node.content)}</Heading>
-    //         ),
-    //         // [BLOCKS.HEADING_4]: (node, next) => (
-    //         //   <Heading as="h4">{next(node.content)}</Heading>
-    //         // ),
-    //       },
-    //     },
-    //   },
-    // },
   ],
 };
