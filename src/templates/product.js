@@ -22,19 +22,19 @@ import jsonToHTML from '../utils/json-to-html';
 
 const ProductTemplate = ({
   data: {
-    product,
     product: {
       title,
       images,
       description: { json },
       sku,
-      stripeSku: { price, currency },
+      stripeSku,
     },
   },
 }) => {
   const imageSources = images.map((image) => image.fluid);
   const carousel = useCarousel();
   const { addToCart, isCartContains } = useCart();
+  const { price, currency } = stripeSku || { price: 0, currency: 'eur' };
 
   return (
     <Layout page={{ meta_title: title }}>
