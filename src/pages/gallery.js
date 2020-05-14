@@ -2,12 +2,16 @@
 
 import { graphql, Link } from 'gatsby';
 import BackgroundImage from 'gatsby-background-image';
-import { AspectRatio, Heading, Grid, jsx } from 'theme-ui';
+import { AspectRatio, Box, Heading, Grid, jsx } from 'theme-ui';
 import Layout from '../components/layout';
+import jsonToHTML from '../utils/json-to-html';
 
 const GalleryPage = ({
   data: {
     page,
+    page: {
+      content: { json },
+    },
     allContentfulGallery: { galleries },
   },
 }) => (
@@ -37,6 +41,9 @@ const GalleryPage = ({
         </AspectRatio>
       ))}
     </Grid>
+    <Box pb={4} sx={{ textAlign: 'center', color: 'secondary', mt: 4 }}>
+      {jsonToHTML(json)}
+    </Box>
   </Layout>
 );
 

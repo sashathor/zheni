@@ -3,7 +3,7 @@ export default {
     text: '#000',
     background: '#fff',
     primary: '#e5e5e5',
-    secondary: '#ff6347',
+    secondary: '#666',
     highlight: '#f9f9f9',
   },
   fonts: {
@@ -54,21 +54,21 @@ export default {
     h2: {
       textTransform: 'uppercase',
       fontSize: 24,
+      marginBottom: 4,
     },
     h4: {
       textTransform: 'uppercase',
       fontSize: 20,
-      marginBottom: 3,
+      marginBottom: 4,
     },
     h5: {
-      textTransform: 'uppercase',
-      fontSize: 18,
-      marginBottom: 2,
+      fontSize: 20,
+      marginBottom: 4,
     },
     hr: {
       color: 'primary',
-      marginTop: 3,
-      marginBottom: 3,
+      marginTop: 4,
+      marginBottom: 4,
     },
     a: {
       textDecoration: 'none',

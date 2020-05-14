@@ -30,7 +30,11 @@ const GalleryTemplate = ({
             onClick={(event) => carousel.toggle(event, idx)}
           >
             <Box>
-              <Image fluid={fluid} alt={description} fadeIn />
+              <Image
+                fluid={{ ...fluid, aspectRatio: 3 / 4 }}
+                alt={description}
+                fadeIn
+              />
             </Box>
           </Link>
         ))}

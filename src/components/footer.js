@@ -30,7 +30,7 @@ const PAGES = [
 
 const Footer = ({ theme }) => (
   <footer sx={{ mt: '5rem' }}>
-    <Divider />
+    {theme !== 'white' && <Divider sx={{ mb: 3 }} />}
     <nav>
       <Flex
         columns={[PAGES.length]}

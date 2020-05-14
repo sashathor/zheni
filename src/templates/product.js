@@ -43,7 +43,7 @@ const ProductTemplate = ({
           <AspectRatio ratio={3 / 4}>
             <Link href="#" onClick={(event) => carousel.toggle(event, 0)}>
               <Image
-                fluid={images[0].fluid}
+                fluid={{ ...images[0].fluid, aspectRatio: 3 / 4 }}
                 alt={images[0].description}
                 fadeIn
               />
@@ -57,10 +57,10 @@ const ProductTemplate = ({
                   <Box key={idx}>
                     <Link
                       href="#"
-                      onClick={(event) => carousel.toggle(event, idx)}
+                      onClick={(event) => carousel.toggle(event, idx + 1)}
                     >
                       <Image
-                        fluid={image.fluid}
+                        fluid={{ ...image.fluid, aspectRatio: 3 / 4 }}
                         alt={image.description}
                         fadeIn
                       />

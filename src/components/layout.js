@@ -3,9 +3,15 @@
 import { Fragment } from 'react';
 import Helmet from 'react-helmet';
 import { Global, css } from '@emotion/core';
+import styled from '@emotion/styled';
 import { Container, jsx } from 'theme-ui';
 import Header from './header';
 import Footer from './footer';
+
+const LayoutContainer = styled(Container)`
+  max-width: 90vw;
+  width: 768px;
+`;
 
 const Layout = ({ children, subnavItems, page, theme = 'black' }) => {
   const { meta_title, meta_description } = page
@@ -34,19 +40,21 @@ const Layout = ({ children, subnavItems, page, theme = 'black' }) => {
         <title>{meta_title}</title>
         <meta name="description" content={meta_description} />
       </Helmet>
-      <Container
+      <div
         sx={{
-          maxWidth: '90vw',
-          width: '768px',
           minHeight: '100vh',
           display: 'flex',
           flexDirection: 'column',
         }}
       >
         <Header theme={theme} subnavItems={subnavItems} />
-        <main sx={{ flex: '1 1 auto' }}>{children}</main>
-        <Footer theme={theme} />
-      </Container>
+        <LayoutContainer sx={{ flex: '1 1 auto' }}>
+          <main sx={{}}>{children}</main>
+        </LayoutContainer>
+        <LayoutContainer>
+          <Footer theme={theme} />
+        </LayoutContainer>
+      </div>
     </Fragment>
   );
 };

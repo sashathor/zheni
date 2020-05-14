@@ -55,7 +55,7 @@ const ShopPage = ({
   },
 }) => (
   <Layout page={page}>
-    <Box pb={5}>{jsonToHTML(json)}</Box>
+    <Box pb={4}>{jsonToHTML(json)}</Box>
     <Grid gap={4} columns={[3]}>
       {products.map(
         ({
