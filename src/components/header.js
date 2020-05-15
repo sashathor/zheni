@@ -11,9 +11,14 @@ const Header = ({ theme, subnavItems = [] }) => {
 
   return (
     <header sx={{ mb: 5 }}>
-      <Flex sx={{ justifyContent: 'space-between' }}>
-        <Box>
-          <Link to="/">
+      <Flex
+        sx={{
+          justifyContent: 'space-between',
+          display: ['block', 'flex', 'flex'],
+        }}
+      >
+        <Box sx={{ textAlign: ['center', 'left', 'left'] }}>
+          <Link to="/" sx={{ display: 'inline-block' }}>
             <Image
               sx={{
                 width: '20vw',
@@ -26,7 +31,7 @@ const Header = ({ theme, subnavItems = [] }) => {
             />
           </Link>
         </Box>
-        <Box sx={{ pr: 4 }}>
+        <Box sx={{ pr: [0, 4, 4] }}>
           <Navigation theme={theme} subnavItems={subnavItems} />
         </Box>
       </Flex>

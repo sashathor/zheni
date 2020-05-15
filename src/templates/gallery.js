@@ -22,7 +22,7 @@ const GalleryTemplate = ({
       subnavItems={galleries.map(({ slug, title }) => ({ slug, title }))}
     >
       <Heading variant="text.pageTitle">{title}</Heading>
-      <Grid gap={4} columns={[3]}>
+      <Grid gap={[3, 4, 4]} columns={[2, 3, 3]}>
         {images.map(({ id, fluid, description }, idx) => (
           <Link
             key={id}

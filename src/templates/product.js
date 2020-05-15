@@ -38,7 +38,7 @@ const ProductTemplate = ({
 
   return (
     <Layout page={{ meta_title: title }}>
-      <Grid gap={5} columns={[2]}>
+      <Grid gap={[4, 5, 5]} columns={[1, 2, 2]}>
         <Box>
           <AspectRatio ratio={3 / 4}>
             <Link href="#" onClick={(event) => carousel.toggle(event, 0)}>

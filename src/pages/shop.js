@@ -1,7 +1,6 @@
 /** @jsx jsx */
 
 import { graphql } from 'gatsby';
-import { css } from '@emotion/core';
 import BackgroundImage from 'gatsby-background-image';
 import { Link } from 'gatsby';
 import styled from '@emotion/styled';
@@ -12,34 +11,64 @@ import formatPrice from '../utils/format-price';
 import jsonToHTML from '../utils/json-to-html';
 
 const ProductLink = styled(Link)`
+  text-decoration: none;
+
   .details {
-    padding: 1rem;
-    display: none;
+    display: inline-block;
+    background-color: rgba(0, 0, 0, 0.2);
+    width: auto;
+    height: auto;
+    margin: 16px;
+    padding: 16px;
     color: #ffffff;
     text-transform: uppercase;
 
     span {
+      padding-top: 0;
       display: block;
-      padding-top: 45%;
     }
   }
 
   &:hover {
     .details {
-      display: block;
-      display: inline-block;
-      position: relative;
-      width: 100%;
-      height: 100%;
       &:before {
-        position: absolute;
-        content: '';
+        background-color: #ff0000;
+        z-index: -10;
+        content: none;
+      }
+    }
+  }
+
+  @media (min-width: 640px) {
+    .details {
+      padding: 1rem;
+      display: none;
+
+      span {
+        display: block;
+        padding-top: 45%;
+      }
+    }
+
+    &:hover {
+      .details {
+        display: block;
+        display: inline-block;
+        position: relative;
         width: 100%;
         height: 100%;
-        background-color: rgba(0, 0, 0, 0.3);
-        z-index: -1;
-        top: 0;
-        left: 0;
+        margin: 0;
+
+        &:before {
+          position: absolute;
+          content: '';
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.2);
+          z-index: -1;
+          top: 0;
+          left: 0;
+        }
       }
     }
   }
@@ -55,8 +84,10 @@ const ShopPage = ({
   },
 }) => (
   <Layout page={page}>
-    <Box pb={4}>{jsonToHTML(json)}</Box>
-    <Grid gap={4} columns={[3]}>
+    <Box pb={[0, 4, 4]} sx={{ textAlign: ['center', 'left', 'left'] }}>
+      {jsonToHTML(json)}
+    </Box>
+    <Grid gap={[3, 4, 4]} columns={[2, 3, 3]}>
       {products.map(
         ({
           currency,
@@ -69,9 +100,7 @@ const ShopPage = ({
                 fluid={images[0].fluid}
                 Tag="section"
                 fadeIn="soft"
-                css={css`
-                  height: 100%;
-                `}
+                sx={{ height: '100%' }}
               >
                 <div className="details">
                   <span>{title}</span>

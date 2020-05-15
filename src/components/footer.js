@@ -35,8 +35,9 @@ const Footer = ({ theme }) => (
         columns={[PAGES.length]}
         sx={{
           marginBottom: '1rem',
-          justifyContent: 'flex-end',
+          justifyContent: ['center', 'flex-end', 'flex-end'],
           alignItems: 'baseline',
+          flexWrap: ['wrap', 'unset', 'unset'],
         }}
       >
         {PAGES.map(({ slug, title }) => (
@@ -44,8 +45,8 @@ const Footer = ({ theme }) => (
             key={slug}
             sx={{
               padding: '0.25rem',
-              marginRight: '1rem',
-              '&:last-of-type': { marginRight: 0 },
+              margin: ['0 0.25rem', '0 1rem 0 0', '0 1rem 0 0'],
+              '&:last-of-type': { marginRight: ['0.25rem', 0, 0] },
             }}
           >
             <NavLink

@@ -15,8 +15,10 @@ const AboutPage = ({
   },
 }) => (
   <Layout page={page}>
-    <Grid gap={4} columns={['2fr 1fr']}>
-      <Box>{jsonToHTML(json)}</Box>
+    <Grid gap={[0, 4, 4]} columns={[1, '2fr 1fr', '2fr 1fr']}>
+      <Box sx={{ textAlign: ['center', 'left', 'left'] }}>
+        {jsonToHTML(json)}
+      </Box>
       <Box>
         <Image fluid={aboutImg.fluid} alt={aboutImg.description} fadeIn />
       </Box>

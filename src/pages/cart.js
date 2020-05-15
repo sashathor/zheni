@@ -4,7 +4,17 @@ import { Fragment } from 'react';
 import { graphql } from 'gatsby';
 import Image from 'gatsby-image';
 import { Link } from 'gatsby';
-import { Box, Button, Flex, Close, Grid, Heading, Text, jsx } from 'theme-ui';
+import {
+  Box,
+  Button,
+  Flex,
+  Close,
+  Grid,
+  Heading,
+  Text,
+  Link as ThemeLink,
+  jsx,
+} from 'theme-ui';
 import Layout from '../components/layout';
 import useCart from '../hooks/use-cart';
 import formatPrice from '../utils/format-price';
@@ -67,10 +77,10 @@ const CartPage = ({
             pb={2}
             mb={2}
           >
-            <Box pl={4}>
+            <Box pl={[0, 4, 4]}>
               <Text variant="text.upperCase">Item</Text>
             </Box>
-            <Box sx={{ textAlign: 'right' }} pr={4}>
+            <Box sx={{ textAlign: 'right' }} pr={[0, 4, 4]}>
               <Text variant="text.upperCase">Price</Text>
             </Box>
           </Grid>
@@ -83,8 +93,8 @@ const CartPage = ({
             }) => (
               <Grid
                 key={id}
-                gap={4}
-                columns={['1fr 3fr 1fr']}
+                gap={[2, 4, 4]}
+                columns={[1, '1fr 3fr 1fr', '1fr 3fr 1fr']}
                 sx={{
                   alignItems: 'center',
                   borderBottom: '1px solid #e5e5e5',
@@ -93,27 +103,43 @@ const CartPage = ({
                 pb={4}
                 mb={4}
               >
-                <Box pl={4} sx={{ position: 'relative' }}>
-                  <RemoveButton onClick={() => removeFromCart({ sku: id })} />
+                <Box
+                  pl={[0, 4, 4]}
+                  mb={[3, 0, 0]}
+                  sx={{ position: 'relative' }}
+                >
+                  <RemoveButton
+                    sx={{ display: ['none', 'block', 'block'] }}
+                    onClick={() => removeFromCart({ sku: id })}
+                  />
                   <Link to={`/shop/product/${slug}`}>
                     <Image
                       fluid={images[0].fluid}
                       alt={title}
                       fadeIn
                       className="img"
+                      sx={{ maxHeight: ['40vh', 'auto', 'auto'] }}
                     />
                   </Link>
                 </Box>
                 <Box>
                   <Text>{title}</Text>
                 </Box>
-                <Box sx={{ textAlign: 'right' }} pr={4}>
+                <Box sx={{ textAlign: ['left', 'right', 'right'] }} pr={4}>
                   {formatPrice(price, currency)}
+                </Box>
+                <Box sx={{ display: ['block', 'none', 'none'] }}>
+                  <ThemeLink onClick={() => removeFromCart({ sku: id })}>
+                    Remove
+                  </ThemeLink>
                 </Box>
               </Grid>
             ),
           )}
-          <Flex sx={{ textAlign: 'right', justifyContent: 'flex-end' }} pr={4}>
+          <Flex
+            sx={{ textAlign: 'right', justifyContent: 'flex-end' }}
+            pr={[0, 4, 4]}
+          >
             <Text variant="text.upperCase" mr={4}>
               Subtotal
             </Text>
@@ -128,7 +154,7 @@ const CartPage = ({
                 )}
             </Text>
           </Flex>
-          <Box sx={{ textAlign: 'right' }} pr={4} mt={4}>
+          <Box sx={{ textAlign: 'right' }} pr={[0, 4, 4]} mt={4}>
             <Button
               onClick={(event) =>
                 redirectToCheckout(

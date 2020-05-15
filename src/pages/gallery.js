@@ -20,7 +20,7 @@ const GalleryPage = ({
     subnavItems={galleries.map(({ slug, title }) => ({ slug, title }))}
   >
     <Heading variant="text.pageTitle">Gallery</Heading>
-    <Grid gap={4} columns={[2]}>
+    <Grid gap={[3, 4, 4]} columns={[2]}>
       {galleries.map(({ slug, title, images }) => (
         <AspectRatio key={slug} ratio={3 / 4}>
           <Link

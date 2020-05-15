@@ -32,7 +32,7 @@ const PAGES = [
   { slug: 'cart' },
 ];
 
-const Navigation = ({ theme, subnavItems }) => {
+const Navigation = ({ theme }) => {
   const {
     state: { shoppingCart },
   } = useCart();
@@ -44,18 +44,20 @@ const Navigation = ({ theme, subnavItems }) => {
       <Flex
         columns={[PAGES.length]}
         sx={{
-          margin: '3vh 0 10vh 40px',
-          justifyContent: 'flex-end',
+          margin: ['0 3vw', '3vh 0 10vh 40px', '3vh 0 10vh 40px'],
+          justifyContent: ['center', 'flex-end', 'flex-end'],
+          flexWrap: ['wrap', 'unset', 'unset'],
           alignItems: 'baseline',
         }}
       >
-        {PAGES.map(({ slug, title, children = subnavItems }) => (
+        {PAGES.map(({ slug, title }) => (
           <Box
             key={slug}
             sx={{
-              marginRight: '1.5rem',
+              margin: ['0 0.25rem', '0 1.5rem 0 0', '0 1.5rem 0 0'],
+              float: ['left', 'none', 'none'],
               padding: '0.25rem',
-              '&:last-of-type': { marginRight: 0 },
+              '&:last-of-type': { marginRight: ['0.25rem', 0, 0] },
             }}
           >
             <NavLink
@@ -71,19 +73,6 @@ const Navigation = ({ theme, subnavItems }) => {
                 </sup>
               )}
             </NavLink>
-            {children.length > 0 && (
-              <div className="sub-menu" sx={{ display: 'none' }}>
-                {children.map(({ slug: childSlug, title: childTitle }) => (
-                  <NavLink
-                    key={childSlug}
-                    to={`/${slug}/${childSlug}`}
-                    theme={theme}
-                  >
-                    {childTitle || childSlug}
-                  </NavLink>
-                ))}
-              </div>
-            )}
           </Box>
         ))}
       </Flex>
