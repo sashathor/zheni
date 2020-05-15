@@ -5,8 +5,7 @@ import styled from '@emotion/styled';
 import { Box, Divider, Flex, jsx } from 'theme-ui';
 
 const NavLink = styled(Link)`
-  color: ${({ theme }) =>
-    theme === 'white' ? 'rgba(255, 255, 255, 0.3)' : '#c0c0c0'};
+  color: #c0c0c0;
   text-decoration: none;
   text-transform: uppercase;
   display: block;
@@ -30,7 +29,7 @@ const PAGES = [
 
 const Footer = ({ theme }) => (
   <footer sx={{ mt: '5rem' }}>
-    {theme !== 'white' && <Divider sx={{ mb: 3 }} />}
+    <Divider sx={{ mb: 3 }} />
     <nav>
       <Flex
         columns={[PAGES.length]}

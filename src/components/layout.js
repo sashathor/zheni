@@ -51,9 +51,11 @@ const Layout = ({ children, subnavItems, page, theme = 'black' }) => {
         <LayoutContainer sx={{ flex: '1 1 auto' }}>
           <main sx={{}}>{children}</main>
         </LayoutContainer>
-        <LayoutContainer>
-          <Footer theme={theme} />
-        </LayoutContainer>
+        {theme !== 'white' && (
+          <LayoutContainer>
+            <Footer theme={theme} />
+          </LayoutContainer>
+        )}
       </div>
     </Fragment>
   );

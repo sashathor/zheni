@@ -1,14 +1,18 @@
 /** @jsx jsx */
+
 import { BLOCKS, MARKS, INLINES } from '@contentful/rich-text-types';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
 import { Divider, Heading, Text, Link, jsx } from 'theme-ui';
+import shortid from 'shortid';
 
 const options = {
   renderMark: {
-    [MARKS.BOLD]: (text) => <Text as="h4">aaa{text}</Text>,
+    [MARKS.BOLD]: (text) => <Text as="h4">{text}</Text>,
   },
   renderNode: {
-    [BLOCKS.PARAGRAPH]: (node, children) => <Text mb={3}>{children}</Text>,
+    [BLOCKS.PARAGRAPH]: (node, children) => (
+      <Text variant="styles.p">{children}</Text>
+    ),
     [BLOCKS.HEADING_1]: (node, children) => (
       <Heading variant="styles.h1">{children}</Heading>
     ),
@@ -29,7 +33,10 @@ const options = {
       <Link href={node.data.uri}>{children}</Link>
     ),
   },
-  renderText: (text) => text.replace('!', '?'),
+  renderText: (text, a, b) =>
+    text
+      .split('\\n')
+      .flatMap((text, i) => [i > 0 && <br key={shortid.generate()} />, text]),
 };
 
 const jsonToHTML = (document) => documentToReactComponents(document, options);

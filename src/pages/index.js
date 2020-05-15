@@ -50,7 +50,7 @@ export const pageQuery = graphql`
       ...PageData
     }
     bgImage: contentfulAsset(title: { eq: "home-bg" }) {
-      fluid {
+      fluid(maxWidth: 1000, quality: 90) {
         ...GatsbyContentfulFluid_withWebp
       }
     }

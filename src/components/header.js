@@ -10,7 +10,7 @@ const Header = ({ theme, subnavItems = [] }) => {
   const smallLogo = useSmallLogo(theme);
 
   return (
-    <header sx={{ mb: 3 }}>
+    <header sx={{ mb: 5 }}>
       <Flex sx={{ justifyContent: 'space-between' }}>
         <Box>
           <Link to="/">

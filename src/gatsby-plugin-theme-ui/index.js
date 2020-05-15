@@ -65,6 +65,9 @@ export default {
       fontSize: 20,
       marginBottom: 4,
     },
+    p: {
+      marginBottom: 4,
+    },
     hr: {
       color: 'primary',
       marginTop: 4,
