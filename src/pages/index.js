@@ -14,12 +14,13 @@ const HomePage = ({ data: { page, bgImage, logoWhiteBig } }) => (
       fadeIn="soft"
       preserveStackingContext
       css={css`
-        position: absolute !important;
+        position: fixed !important;
         top: 0px;
         left: 0px;
         z-index: -1;
         width: 100vw;
-        height: 100vh;
+        min-height: 100vh;
+        height: 100%;
       `}
     />
     <Image
