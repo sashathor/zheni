@@ -34,7 +34,8 @@ export default {
       color: '#666',
       textTransform: 'uppercase',
       borderRadius: 0,
-      boxShadow: 'inset 0 2px 4px #909090',
+      // boxShadow: 'inset 0 2px 4px #909090',
+      border: '1px solid #666',
       pt: '1rem',
       pb: '1rem',
       pr: '1.5rem',
@@ -43,6 +44,14 @@ export default {
       '&:hover': {
         color: 'inherit',
       },
+    },
+  },
+  alerts: {
+    primary: {
+      color: 'text',
+      bg: 'primary',
+      borderRadius: 0,
+      fontWeight: 'body',
     },
   },
   styles: {

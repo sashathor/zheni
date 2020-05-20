@@ -1,21 +1,23 @@
 /** @jsx jsx */
 
-import { Fragment } from 'react';
+import { Fragment, useState, useCallback } from 'react';
 import { graphql } from 'gatsby';
 import Image from 'gatsby-image';
 import { Link } from 'gatsby';
 import {
+  Alert,
   Box,
   Button,
-  Flex,
   Close,
   Grid,
   Heading,
+  Spinner,
   Text,
   Link as ThemeLink,
   jsx,
 } from 'theme-ui';
 import Layout from '../components/layout';
+import Delivery from '../components/delivery';
 import useCart from '../hooks/use-cart';
 import formatPrice from '../utils/format-price';
 
@@ -43,19 +45,72 @@ const CartPage = ({
   },
 }) => {
   const {
-    state: { shoppingCart },
-    redirectToCheckout,
+    state: { shoppingCart, availableProducts },
+    checkout,
     removeFromCart,
   } = useCart();
 
-  const availableProducts = products.filter(
-    (product) => shoppingCart[product.id],
+  const [delivery, setDelivery] = useState();
+  const [checkoutInProcess, setCheckoutInProcess] = useState(false);
+  const [checkoutAfterCheck, setCheckoutAfterCheck] = useState(false);
+  const [alertMessage, setAlertMessage] = useState();
+
+  const setDeliveryFetching = useCallback(setCheckoutInProcess, []);
+  const onChangeDelivery = useCallback(
+    (data) => setDelivery(data || undefined),
+    [],
   );
+
+  const productsList = products
+    .filter((product) => shoppingCart.indexOf(product.id) > -1)
+    .map((product) => ({
+      ...product,
+      active: availableProducts?.indexOf(product.id) > -1,
+    }));
+
+  const productsListActive = productsList.filter(({ active }) => active);
+
+  const isCheckoutAllowed = () =>
+    productsListActive.length > 0 && delivery !== undefined;
+
+  const checkoutCart = async (event) => {
+    setCheckoutInProcess(true);
+    setAlertMessage(undefined);
+    await checkout({
+      event,
+      delivery,
+      items: productsList.map(({ id, active }) => ({
+        sku: id,
+        active,
+        quantity: 1,
+      })),
+      unavailableProductsCallback: () => {
+        setCheckoutAfterCheck(true);
+        setCheckoutInProcess(false);
+        setAlertMessage(
+          `Unfortunately, some of the selected products are not available anymore. ${
+            isCheckoutAllowed() ? " Click 'Checkout' to proceed." : ''
+          }`,
+        );
+      },
+      checkoutAfterCheck,
+    }).catch((e) => {
+      setAlertMessage('Something went wrong. Try again in a few minutes.');
+      setCheckoutInProcess(false);
+    });
+  };
+
+  const cost = {
+    subtotal: productsListActive.reduce((total, { price }) => total + price, 0),
+    getTotal: function () {
+      return this.subtotal + delivery?.price;
+    },
+  };
 
   return (
     <Layout page={page}>
       <Heading variant="text.pageTitle">Shopping cart</Heading>
-      {availableProducts.length === 0 ? (
+      {productsList.length === 0 ? (
         <Box
           sx={{
             borderTop: '1px solid #e5e5e5',
@@ -84,11 +139,11 @@ const CartPage = ({
               <Text variant="text.upperCase">Price</Text>
             </Box>
           </Grid>
-          {availableProducts.map(
+          {productsList.map(
             ({
               id,
-              currency,
               price,
+              active,
               productContentful: { title, slug, images },
             }) => (
               <Grid
@@ -98,6 +153,7 @@ const CartPage = ({
                 sx={{
                   alignItems: 'center',
                   borderBottom: '1px solid #e5e5e5',
+                  color: active ? 'inherit' : '#a5a5a5',
                 }}
                 mt={4}
                 pb={4}
@@ -110,7 +166,7 @@ const CartPage = ({
                 >
                   <RemoveButton
                     sx={{ display: ['none', 'block', 'block'] }}
-                    onClick={() => removeFromCart({ sku: id })}
+                    onClick={() => removeFromCart({ id })}
                   />
                   <Link to={`/shop/product/${slug}`}>
                     <Image
@@ -118,7 +174,10 @@ const CartPage = ({
                       alt={title}
                       fadeIn
                       className="img"
-                      sx={{ maxHeight: ['40vh', 'auto', 'auto'] }}
+                      sx={{
+                        maxHeight: ['40vh', 'auto', 'auto'],
+                        opacity: active ? 1 : 0.4,
+                      }}
                     />
                   </Link>
                 </Box>
@@ -126,45 +185,75 @@ const CartPage = ({
                   <Text>{title}</Text>
                 </Box>
                 <Box sx={{ textAlign: ['left', 'right', 'right'] }} pr={4}>
-                  {formatPrice(price, currency)}
+                  {availableProducts && (active ? formatPrice(price) : 'Sold')}
                 </Box>
                 <Box sx={{ display: ['block', 'none', 'none'] }}>
-                  <ThemeLink onClick={() => removeFromCart({ sku: id })}>
+                  <ThemeLink onClick={() => removeFromCart({ id })}>
                     Remove
                   </ThemeLink>
                 </Box>
               </Grid>
             ),
           )}
-          <Flex
-            sx={{ textAlign: 'right', justifyContent: 'flex-end' }}
-            pr={[0, 4, 4]}
-          >
-            <Text variant="text.upperCase" mr={4}>
-              Subtotal
-            </Text>
-            <Text>
-              {availableProducts.length > 0 &&
-                formatPrice(
-                  availableProducts.reduce(
-                    (total, { price }) => total + price,
+          {productsListActive.length > 0 && (
+            <Grid gap={[2, 4, 4]} columns={[1, '3fr 2fr', '3fr 2fr']}>
+              <Box mr={[0, '20%', '20%']}>
+                <Delivery
+                  weight={productsListActive.reduce(
+                    (total, { productContentful: { weight } }) =>
+                      total + weight,
                     0,
-                  ),
-                  availableProducts[0].currency,
-                )}
-            </Text>
-          </Flex>
-          <Box sx={{ textAlign: 'right' }} pr={[0, 4, 4]} mt={4}>
-            <Button
-              onClick={(event) =>
-                redirectToCheckout(
-                  event,
-                  availableProducts.map(({ id }) => ({ sku: id, quantity: 1 })),
-                )
-              }
+                  )}
+                  setFetching={setDeliveryFetching}
+                  onChange={onChangeDelivery}
+                  disabled={checkoutInProcess}
+                />
+              </Box>
+              <Box pr={[0, 4, 4]} pt={4}>
+                <Grid gap={[2, 3, 3]} columns={2}>
+                  <Box>
+                    <Text variant="text.upperCase">Subtotal</Text>
+                  </Box>
+                  <Box sx={{ textAlign: 'right' }}>
+                    {formatPrice(cost.subtotal)}
+                  </Box>
+                  {delivery?.price && (
+                    <Fragment>
+                      <Box>
+                        <Text variant="text.upperCase">Delivery</Text>
+                      </Box>
+                      <Box sx={{ textAlign: 'right' }}>
+                        {formatPrice(delivery.price)}
+                      </Box>
+                      <Box>
+                        <Text variant="text.upperCase">Total</Text>
+                      </Box>
+                      <Box sx={{ textAlign: 'right' }}>
+                        {formatPrice(cost.getTotal())}
+                      </Box>
+                    </Fragment>
+                  )}
+                </Grid>
+              </Box>
+            </Grid>
+          )}
+          {alertMessage && (
+            <Alert
+              variant="primary"
+              mt={4}
+              mb={4}
+              pr={4}
+              sx={{ display: 'block', textAlign: 'right' }}
             >
-              Checkout
-            </Button>
+              {alertMessage}
+            </Alert>
+          )}
+
+          <Box sx={{ textAlign: 'right' }} mt={2}>
+            {checkoutInProcess && <Spinner />}
+            {!checkoutInProcess && isCheckoutAllowed() && (
+              <Button onClick={(event) => checkoutCart(event)}>Checkout</Button>
+            )}
           </Box>
         </Fragment>
       )}
@@ -182,12 +271,11 @@ export const pageQuery = graphql`
     allStripeSku {
       products: nodes {
         id
-        currency
         price
         productContentful {
-          id
           title
           slug
+          weight
           images {
             fluid {
               ...GatsbyContentfulFluid_withWebp

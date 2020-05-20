@@ -26,7 +26,7 @@ const ProductTemplate = ({
       title,
       images,
       description: { json },
-      sku,
+      id,
       stripeSku,
     },
   },
@@ -34,7 +34,11 @@ const ProductTemplate = ({
   const imageSources = images.map((image) => image.fluid);
   const carousel = useCarousel();
   const { addToCart, isCartContains } = useCart();
-  const { price, currency } = stripeSku || { price: 0, currency: 'eur' };
+  const { price, currency, active } = stripeSku || {
+    price: 0,
+    currency: 'eur',
+    active: true,
+  };
 
   return (
     <Layout page={{ meta_title: title }}>
@@ -75,12 +79,15 @@ const ProductTemplate = ({
           <Heading variant="styles.h4" mb={4}>
             {title}
           </Heading>
-          <Text mb={4}>{formatPrice(price, currency)}</Text>
+          <Text mb={4}>{active ? formatPrice(price, currency) : 'SOLD'}</Text>
           <Text>{jsonToHTML(json)}</Text>
-          {isCartContains(sku) ? (
-            <Message sx={{ borderRadius: 0 }}>Item added to cart</Message>
+          {/* {isCartContains(id) || !active ? ( */}
+          {isCartContains(id) ? (
+            <Message sx={{ borderRadius: 0 }}>
+              <Text variant="text.upperCase">{!active ? 'Sold' : 'Added'}</Text>
+            </Message>
           ) : (
-            <Button onClick={() => addToCart({ sku, price, quantity: 1 })}>
+            <Button onClick={() => addToCart({ id, price, quantity: 1 })}>
               Add to cart
             </Button>
           )}
@@ -97,7 +104,7 @@ export const pageQuery = graphql`
     product: contentfulProduct(slug: { eq: $slug }) {
       title
       slug
-      sku
+      id: contentful_id
 
       description {
         json
@@ -113,6 +120,7 @@ export const pageQuery = graphql`
       stripeSku {
         currency
         price
+        active
       }
     }
   }

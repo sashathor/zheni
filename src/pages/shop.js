@@ -88,29 +88,33 @@ const ShopPage = ({
       {jsonToHTML(json)}
     </Box>
     <Grid gap={[3, 4, 4]} columns={[2, 3, 3]}>
-      {products.map(
-        ({
-          currency,
-          price,
-          productContentful: { id, title, slug, images },
-        }) => (
-          <AspectRatio key={id} ratio={3 / 4}>
-            <ProductLink to={`/shop/product/${slug}`}>
-              <BackgroundImage
-                fluid={images[0].fluid}
-                Tag="section"
-                fadeIn="soft"
-                sx={{ height: '100%' }}
-              >
-                <div className="details">
-                  <span>{title}</span>
-                  {formatPrice(price, currency)}
-                </div>
-              </BackgroundImage>
-            </ProductLink>
-          </AspectRatio>
-        ),
-      )}
+      {products
+        .filter(({ productContentful }) => productContentful)
+        .map(
+          ({
+            active,
+            currency,
+            price,
+            id,
+            productContentful: { title, slug, images },
+          }) => (
+            <AspectRatio key={id} ratio={3 / 4}>
+              <ProductLink to={`/shop/product/${slug}`}>
+                <BackgroundImage
+                  fluid={images[0].fluid}
+                  Tag="section"
+                  fadeIn="soft"
+                  sx={{ height: '100%' }}
+                >
+                  <div className="details">
+                    <span>{title}</span>
+                    {active ? formatPrice(price, currency) : 'SOLD'}
+                  </div>
+                </BackgroundImage>
+              </ProductLink>
+            </AspectRatio>
+          ),
+        )}
     </Grid>
   </Layout>
 );
@@ -126,8 +130,9 @@ export const pageQuery = graphql`
       products: nodes {
         currency
         price
+        active
+        id
         productContentful {
-          id
           title
           slug
           images {

@@ -93,11 +93,11 @@ exports.sourceNodes = ({ actions }) => {
   const { createTypes } = actions;
   createTypes(`
     type StripeSku implements Node {
-      productContentful: ContentfulProduct @link(by: "sku", from: "id")
+      productContentful: ContentfulProduct @link(by: "contentful_id", from: "id")
     }
 
     type ContentfulProduct implements Node {
-      stripeSku: StripeSku @link(by: "id", from: "sku")
+      stripeSku: StripeSku @link(by: "id", from: "contentful_id")
     }
   `);
 };

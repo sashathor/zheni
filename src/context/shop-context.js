@@ -6,36 +6,39 @@ const getShoppingCartFromLocalStorage = () =>
     : null;
 
 const shopContextValues = {
-  shoppingCart: JSON.parse(getShoppingCartFromLocalStorage()) || {},
+  shoppingCart: JSON.parse(getShoppingCartFromLocalStorage()) || [],
+  availableProducts: undefined,
 };
 
 const shopReducer = (state, { type, payload }) => {
-  let shoppingCart;
+  const { shoppingCart: shoppingCartPrev } = state;
   switch (type) {
     case 'ADD_TO_CART':
-      shoppingCart = { ...state.shoppingCart };
-      let product = shoppingCart[payload.sku];
-      if (product) {
-        product.quantity = product.quantity + 1;
-      } else {
-        shoppingCart[payload.sku] = payload;
+      if (shoppingCartPrev.indexOf(payload.id) === -1) {
+        const shoppingCart = [...shoppingCartPrev, payload.id];
+        localStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
+        return { ...state, shoppingCart };
       }
-      localStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
-      return { ...state, shoppingCart };
+      break;
     case 'REMOVE_FROM_CART':
-      shoppingCart = { ...state.shoppingCart };
-      if (shoppingCart[payload.sku]) {
-        delete shoppingCart[payload.sku];
+      const itemIdx = shoppingCartPrev.indexOf(payload.id);
+      if (itemIdx > -1) {
+        const shoppingCart = [...shoppingCartPrev];
+        shoppingCart.splice(itemIdx, 1);
+        localStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
+        return { ...state, shoppingCart };
       }
-      localStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
-      return { ...state, shoppingCart };
+      break;
     case 'CLEAR_CART':
-      shoppingCart = {};
+      const shoppingCart = [];
       localStorage.removeItem('shoppingCart');
       return { ...state, shoppingCart };
+    case 'SET_AVAILABLE_PRODUCTS':
+      return { ...state, availableProducts: payload };
     default:
       return state;
   }
+  return state;
 };
 
 const ShopContext = createContext(shopReducer);

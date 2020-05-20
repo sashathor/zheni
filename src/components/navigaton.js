@@ -3,7 +3,7 @@
 import { Link } from 'gatsby';
 import styled from '@emotion/styled';
 import { Flex, jsx, Box } from 'theme-ui';
-import useCart from '../hooks/use-cart';
+import useAvailableProducts from '../hooks/use-available-products';
 
 const NavLink = styled(Link)`
   color: ${(props) => (props.theme === 'white' ? '#ffffff' : '#000000')};
@@ -33,11 +33,7 @@ const PAGES = [
 ];
 
 const Navigation = ({ theme }) => {
-  const {
-    state: { shoppingCart },
-  } = useCart();
-
-  const shoppingCartLength = Object.keys(shoppingCart).length;
+  const { availableProducts } = useAvailableProducts();
 
   return (
     <nav role="navigation">
@@ -69,7 +65,9 @@ const Navigation = ({ theme }) => {
               {title || slug}
               {slug === 'cart' && (
                 <sup sx={{ height: '1rem' }}>
-                  {shoppingCartLength > 0 && Object.keys(shoppingCart).length}
+                  {availableProducts &&
+                    availableProducts.length > 0 &&
+                    availableProducts.length}
                 </sup>
               )}
             </NavLink>

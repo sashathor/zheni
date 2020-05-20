@@ -2,8 +2,8 @@
   ID = "c544b2ba-1921-4703-aa92-230aaa4b8632"
 
 [Build]
-  Publish = ""
-  Functions = ""
+  Publish = "public"
+  Functions = "functions"
 
 [[plugins]]
   package = "netlify-plugin-gatsby-cache"
