@@ -1,6 +1,35 @@
 const axios = require('axios');
 const stripe = require('stripe')(process.env.GATSBY_STRIPE_SECRET_KEY);
 const functionResponse = require('./utils/function-response');
+const STRIPE_DELIVERY_PRODUCT = process.env.GATSBY_STRIPE_DELIVERY_PRODUCT;
+
+const processDelivery = async ({ price, code, country }) => {
+  let deliveryProduct;
+
+  try {
+    deliveryProduct = await stripe.products.retrieve(STRIPE_DELIVERY_PRODUCT);
+  } catch (e) {}
+
+  if (!deliveryProduct) {
+    deliveryProduct = await stripe.products.create({
+      name: 'Delivery',
+      id: STRIPE_DELIVERY_PRODUCT,
+      type: 'good',
+      attributes: ['name', 'destination'],
+    });
+  }
+
+  return await stripe.skus.create({
+    price,
+    currency: 'eur',
+    inventory: { type: 'infinite' },
+    attributes: {
+      name: `Delivery to ${country}`,
+      destination: code,
+    },
+    product: STRIPE_DELIVERY_PRODUCT,
+  });
+};
 
 exports.handler = async ({ body }) => {
   const data = body && JSON.parse(body);
@@ -11,17 +40,7 @@ exports.handler = async ({ body }) => {
 
     if (type === 'zheni.checkout.delivery') {
       try {
-        const { price, code, country } = data;
-        const deliverySku = await stripe.skus.create({
-          price,
-          currency: 'eur',
-          inventory: { type: 'infinite' },
-          attributes: {
-            name: `Delivery to ${country}`,
-            destination: code,
-          },
-          product: process.env.GATSBY_STRIPE_DELIVERY_PRODUCT,
-        });
+        const deliverySku = await processDelivery(data);
         response = {
           deliverySku: deliverySku.id,
         };
@@ -38,7 +57,9 @@ exports.handler = async ({ body }) => {
           },
         } = data;
         const items = display_items
-          .filter((item) => item.sku)
+          .filter(
+            (item) => item.sku && item.sku.product !== STRIPE_DELIVERY_PRODUCT,
+          )
           .map((item) => item.sku.id);
 
         let checkoutCompleted = [];

@@ -34,11 +34,7 @@ const ProductTemplate = ({
   const imageSources = images.map((image) => image.fluid);
   const carousel = useCarousel();
   const { addToCart, isCartContains } = useCart();
-  const { price, currency, active } = stripeSku || {
-    price: 0,
-    currency: 'eur',
-    active: true,
-  };
+  const { price, currency, active } = stripeSku || {};
 
   return (
     <Layout page={{ meta_title: title }}>
@@ -81,8 +77,7 @@ const ProductTemplate = ({
           </Heading>
           <Text mb={4}>{active ? formatPrice(price, currency) : 'SOLD'}</Text>
           <Text>{jsonToHTML(json)}</Text>
-          {/* {isCartContains(id) || !active ? ( */}
-          {isCartContains(id) ? (
+          {isCartContains(id) || !active ? (
             <Message sx={{ borderRadius: 0 }}>
               <Text variant="text.upperCase">{!active ? 'Sold' : 'Added'}</Text>
             </Message>

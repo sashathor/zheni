@@ -17,7 +17,9 @@ const useCart = () => {
   };
 
   const clearCart = () => {
-    dispatch({ type: 'CLEAR_CART' });
+    if (shoppingCart.length > 0) {
+      dispatch({ type: 'CLEAR_CART' });
+    }
   };
 
   const isCartContains = (id) => shoppingCart.indexOf(id) > -1;

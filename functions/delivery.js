@@ -12,7 +12,9 @@ exports.handler = async ({ body }) => {
       }`;
       const deliveryResponse = await axios.get(url);
       const { products } = deliveryResponse.data;
-      const product = products.find(({ type }) => type === 'b');
+      const product = products.find(
+        ({ type }) => type === (code.toUpperCase() === 'SK' ? 'ba' : 'b'),
+      );
       if (product) {
         response = {
           price: Number(product.price) * 100,
