@@ -107,7 +107,7 @@ export const pageQuery = graphql`
 
       images {
         id
-        fluid {
+        fluid(maxWidth: 1200, quality: 90) {
           ...GatsbyContentfulFluid_withWebp
         }
       }
