@@ -26,7 +26,7 @@ const ProductTemplate = ({
       title,
       images,
       description: { json },
-      id,
+      contentful_id: id,
       stripeSku,
     },
   },
@@ -99,7 +99,7 @@ export const pageQuery = graphql`
     product: contentfulProduct(slug: { eq: $slug }) {
       title
       slug
-      id: contentful_id
+      contentful_id
 
       description {
         json

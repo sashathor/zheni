@@ -17,7 +17,7 @@ exports.handler = async ({ body }) => {
       );
       if (product) {
         response = {
-          price: Number(product.price) * 100,
+          price: Math.round(Number(product.price) * 100),
           days: product.delivery,
         };
       }

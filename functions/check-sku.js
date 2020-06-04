@@ -8,7 +8,7 @@ exports.handler = async ({ body }) => {
   try {
     const skus = bodyData.skus;
     if (skus) {
-      const ids = skus.split(',');
+      const ids = skus.split(',').filter((sku) => sku !== '');
       const { data } = await stripe.skus.list({ ids });
       response = ids.map((id) => ({
         id,
@@ -20,8 +20,8 @@ exports.handler = async ({ body }) => {
         })(data.find((item) => item.id === id)),
       }));
     }
-  } catch (e) {
-    return functionResponse({ statusCode: 500 });
+  } catch (error) {
+    return functionResponse({ statusCode: 500, error });
   }
 
   return functionResponse({ response });

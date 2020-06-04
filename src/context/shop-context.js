@@ -14,7 +14,7 @@ const shopReducer = (state, { type, payload }) => {
   const { shoppingCart: shoppingCartPrev } = state;
   switch (type) {
     case 'ADD_TO_CART':
-      if (shoppingCartPrev.indexOf(payload.id) === -1) {
+      if (payload.id && shoppingCartPrev.indexOf(payload.id) === -1) {
         const shoppingCart = [...shoppingCartPrev, payload.id];
         localStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
         return { ...state, shoppingCart };

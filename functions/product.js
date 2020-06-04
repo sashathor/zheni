@@ -1,15 +1,18 @@
 const stripe = require('stripe')(process.env.GATSBY_STRIPE_SECRET_KEY);
 const functionResponse = require('./utils/function-response');
 
-const processProduct = async ({ id, title }) => {
+const processProduct = async ({ id, title, active }) => {
   let entity;
 
   try {
     entity = await stripe.products.retrieve(id);
-  } catch (e) {}
+  } catch (error) {
+    console.error(error);
+  }
 
   const productFields = {
     name: title['en-US'],
+    active,
   };
 
   if (entity) {
@@ -26,15 +29,18 @@ const processProduct = async ({ id, title }) => {
   });
 };
 
-const processSku = async ({ id, title, price }) => {
+const processSku = async ({ id, title, price, active }) => {
   let entity;
 
   try {
     entity = await stripe.skus.retrieve(id);
-  } catch (e) {}
+  } catch (error) {
+    console.error(error);
+  }
 
   const skuFields = {
     price: Number(price['en-US']) * 100,
+    active,
     attributes: {
       name: title['en-US'],
     },
@@ -68,19 +74,23 @@ exports.handler = async (event) => {
         sys: { contentType },
       } = data;
 
+      console.log({ data });
+
       if (contentType.sys.id === 'product') {
         const {
           sys: { id },
-          fields: { title, price },
+          fields: { title, price, status },
         } = data;
 
-        await processProduct({ id, title });
-        await processSku({ id, title, price });
+        const active = status['en-US'] === 'Active';
+
+        await processProduct({ id, title, active });
+        await processSku({ id, title, price, active });
 
         response = { status: true };
       }
-    } catch (e) {
-      return functionResponse({ statusCode: 500 });
+    } catch (error) {
+      return functionResponse({ statusCode: 500, error });
     }
   }
 

@@ -44,8 +44,8 @@ exports.handler = async ({ body }) => {
         response = {
           deliverySku: deliverySku.id,
         };
-      } catch (e) {
-        return functionResponse({ statusCode: 500 });
+      } catch (error) {
+        return functionResponse({ statusCode: 500, error });
       }
     }
 
@@ -77,8 +77,8 @@ exports.handler = async ({ body }) => {
             checkoutCompleted: checkoutCompleted.length,
           };
         }
-      } catch (e) {
-        return functionResponse({ statusCode: 500 });
+      } catch (error) {
+        return functionResponse({ statusCode: 500, error });
       }
     }
   }

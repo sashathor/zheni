@@ -126,7 +126,7 @@ export const pageQuery = graphql`
     page: contentfulPage(slug: { eq: $slug }) {
       ...PageData
     }
-    allStripeSku {
+    allStripeSku(sort: { order: DESC, fields: productContentful___updatedAt }) {
       products: nodes {
         currency
         price

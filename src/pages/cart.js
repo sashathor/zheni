@@ -61,8 +61,13 @@ const CartPage = ({
     [],
   );
 
+  // .filter(({ productContentful }) => productContentful)
+
   const productsList = products
-    .filter((product) => shoppingCart.indexOf(product.id) > -1)
+    .filter(
+      ({ id, productContentful }) =>
+        productContentful && shoppingCart.indexOf(id) > -1,
+    )
     .map((product) => ({
       ...product,
       active: availableProducts?.indexOf(product.id) > -1,
@@ -268,7 +273,7 @@ export const pageQuery = graphql`
     page: contentfulPage(slug: { eq: $slug }) {
       ...PageData
     }
-    allStripeSku {
+    allStripeSku(sort: { order: DESC, fields: productContentful___updatedAt }) {
       products: nodes {
         id
         price
