@@ -22,7 +22,8 @@ const useCart = () => {
     }
   };
 
-  const isCartContains = (id) => shoppingCart.indexOf(id) > -1;
+  const isCartContains = (id) =>
+    Array.isArray(shoppingCart) && shoppingCart.indexOf(id) > -1;
 
   const redirectToCheckout = async ({ items, code }) => {
     try {
