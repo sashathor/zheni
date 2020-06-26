@@ -75,7 +75,7 @@ const ProductTemplate = ({
           <Heading variant="styles.h4" mb={4}>
             {title}
           </Heading>
-          <Text mb={4}>{active ? formatPrice(price, currency) : 'SOLD'}</Text>
+          <Text mb={4}>{formatPrice(price, currency)}</Text>
           <Text>{jsonToHTML(json)}</Text>
           {isCartContains(id) || !active ? (
             <Message sx={{ borderRadius: 0 }}>
@@ -100,6 +100,7 @@ export const pageQuery = graphql`
       title
       slug
       contentful_id
+      id
 
       description {
         json

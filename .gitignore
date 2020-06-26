@@ -65,12 +65,10 @@ public
 
 # contentful config file
 .contentful.json
-
 .DS_Store
 
 # dotenv environment variables files
-.env
-.env.development
-.env.production
+.env.*
+
 # Local Netlify folder
 .netlify

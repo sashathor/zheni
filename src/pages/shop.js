@@ -108,7 +108,8 @@ const ShopPage = ({
                 >
                   <div className="details">
                     <span>{title}</span>
-                    {active ? formatPrice(price, currency) : 'SOLD'}
+                    <p>{formatPrice(price, currency)}</p>
+                    {!active && <p>SOLD</p>}
                   </div>
                 </BackgroundImage>
               </ProductLink>
