@@ -16,11 +16,11 @@ const ContactPage = ({
   },
 }) => (
   <Layout page={page}>
-    <Grid gap={[0, 6, 6]} columns={[1, '3fr 2fr', '3fr 2fr']}>
+    <Grid gap={[0, 6]} columns={[1, '3fr 2fr']}>
       <Box sx={{ order: 2 }}>
         <Image fluid={contactImg.fluid} alt={contactImg.description} fadeIn />
       </Box>
-      <Box sx={{ textAlign: ['center', 'right', 'right'], order: 1 }}>
+      <Box sx={{ textAlign: ['left', 'right'], order: 1 }}>
         {jsonToHTML(json)}
       </Box>
     </Grid>

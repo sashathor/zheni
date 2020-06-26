@@ -40,9 +40,9 @@ const Navigation = ({ theme }) => {
       <Flex
         columns={[PAGES.length]}
         sx={{
-          margin: ['0 3vw', '3vh 0 10vh 40px', '3vh 0 10vh 40px'],
-          justifyContent: ['center', 'flex-end', 'flex-end'],
-          flexWrap: ['wrap', 'unset', 'unset'],
+          margin: ['0 3vw', '3vh 0 10vh 40px'],
+          justifyContent: ['center', 'flex-end'],
+          flexWrap: ['wrap', 'unset'],
           alignItems: 'baseline',
         }}
       >
@@ -50,10 +50,10 @@ const Navigation = ({ theme }) => {
           <Box
             key={slug}
             sx={{
-              margin: ['0 0.25rem', '0 1.5rem 0 0', '0 1.5rem 0 0'],
-              float: ['left', 'none', 'none'],
+              margin: ['0 0.25rem', '0 1.5rem 0 0'],
+              float: ['left', 'none'],
               padding: '0.25rem',
-              '&:last-of-type': { marginRight: ['0.25rem', 0, 0] },
+              '&:last-of-type': { marginRight: ['0.25rem', 0] },
             }}
           >
             <NavLink

@@ -137,10 +137,10 @@ const CartPage = ({
             pb={2}
             mb={2}
           >
-            <Box pl={[0, 4, 4]}>
+            <Box pl={[0, 4]}>
               <Text variant="text.upperCase">Item</Text>
             </Box>
-            <Box sx={{ textAlign: 'right' }} pr={[0, 4, 4]}>
+            <Box sx={{ textAlign: 'right' }} pr={[0, 4]}>
               <Text variant="text.upperCase">Price</Text>
             </Box>
           </Grid>
@@ -153,8 +153,8 @@ const CartPage = ({
             }) => (
               <Grid
                 key={id}
-                gap={[2, 4, 4]}
-                columns={[1, '1fr 3fr 1fr', '1fr 3fr 1fr']}
+                gap={[2, 4]}
+                columns={[1, '1fr 3fr 1fr']}
                 sx={{
                   alignItems: 'center',
                   borderBottom: '1px solid #e5e5e5',
@@ -164,13 +164,9 @@ const CartPage = ({
                 pb={4}
                 mb={4}
               >
-                <Box
-                  pl={[0, 4, 4]}
-                  mb={[3, 0, 0]}
-                  sx={{ position: 'relative' }}
-                >
+                <Box pl={[0, 4]} mb={[3, 0]} sx={{ position: 'relative' }}>
                   <RemoveButton
-                    sx={{ display: ['none', 'block', 'block'] }}
+                    sx={{ display: ['none', 'block'] }}
                     onClick={() => removeFromCart({ id })}
                   />
                   <Link to={`/shop/product/${slug}`}>
@@ -180,7 +176,7 @@ const CartPage = ({
                       fadeIn
                       className="img"
                       sx={{
-                        maxHeight: ['40vh', 'auto', 'auto'],
+                        maxHeight: ['40vh', 'auto'],
                         opacity: active ? 1 : 0.4,
                       }}
                     />
@@ -189,10 +185,10 @@ const CartPage = ({
                 <Box>
                   <Text>{title}</Text>
                 </Box>
-                <Box sx={{ textAlign: ['left', 'right', 'right'] }} pr={4}>
+                <Box sx={{ textAlign: ['left', 'right'] }} pr={4}>
                   {availableProducts && (active ? formatPrice(price) : 'Sold')}
                 </Box>
-                <Box sx={{ display: ['block', 'none', 'none'] }}>
+                <Box sx={{ display: ['block', 'none'] }}>
                   <ThemeLink onClick={() => removeFromCart({ id })}>
                     Remove
                   </ThemeLink>
@@ -201,8 +197,8 @@ const CartPage = ({
             ),
           )}
           {productsListActive.length > 0 && (
-            <Grid gap={[2, 4, 4]} columns={[1, '3fr 2fr', '3fr 2fr']}>
-              <Box mr={[0, '20%', '20%']}>
+            <Grid gap={[2, 4]} columns={[1, '3fr 2fr']}>
+              <Box mr={[0, '20%']}>
                 <Delivery
                   weight={productsListActive.reduce(
                     (total, { productContentful: { weight } }) =>
@@ -214,8 +210,8 @@ const CartPage = ({
                   disabled={checkoutInProcess}
                 />
               </Box>
-              <Box pr={[0, 4, 4]} pt={4}>
-                <Grid gap={[2, 3, 3]} columns={2}>
+              <Box pr={[0, 4]} pt={4}>
+                <Grid gap={[2, 3]} columns={2}>
                   <Box>
                     <Text variant="text.upperCase">Subtotal</Text>
                   </Box>

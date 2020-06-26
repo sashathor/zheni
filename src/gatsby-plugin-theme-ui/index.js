@@ -22,7 +22,7 @@ export default {
   },
   text: {
     pageTitle: {
-      textAlign: 'center',
+      textAlign: ['left', 'center'],
       variant: 'styles.h4',
     },
     upperCase: {

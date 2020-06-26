@@ -14,7 +14,7 @@ const GenericPageTemplate = ({
   },
 }) => (
   <Layout page={page}>
-    <Box sx={{ textAlign: 'center' }}>
+    <Box sx={{ textAlign: ['left', 'center'] }}>
       <Heading variant="styles.h4" mb={4}>
         {title}
       </Heading>

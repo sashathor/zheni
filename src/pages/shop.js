@@ -84,10 +84,10 @@ const ShopPage = ({
   },
 }) => (
   <Layout page={page}>
-    <Box pb={[0, 4, 4]} sx={{ textAlign: ['center', 'left', 'left'] }}>
+    <Box pb={[0, 4]} sx={{ textAlign: 'left' }}>
       {jsonToHTML(json)}
     </Box>
-    <Grid gap={[3, 4, 4]} columns={[2, 3, 3]}>
+    <Grid gap={[3, 4]} columns={[2, 3]}>
       {products
         .filter(({ productContentful }) => productContentful)
         .map(

@@ -14,10 +14,10 @@ const Header = ({ theme, subnavItems = [] }) => {
       <Flex
         sx={{
           justifyContent: 'space-between',
-          display: ['block', 'flex', 'flex'],
+          display: ['block', 'flex'],
         }}
       >
-        <Box sx={{ textAlign: ['center', 'left', 'left'] }}>
+        <Box sx={{ textAlign: ['center', 'left'] }}>
           <Link to="/" sx={{ display: 'inline-block' }}>
             <Image
               sx={{
@@ -31,7 +31,7 @@ const Header = ({ theme, subnavItems = [] }) => {
             />
           </Link>
         </Box>
-        <Box sx={{ pr: [0, 4, 4] }}>
+        <Box sx={{ pr: [0, 4] }}>
           <Navigation theme={theme} subnavItems={subnavItems} />
         </Box>
       </Flex>
