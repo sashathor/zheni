@@ -1,8 +1,22 @@
-const stripe = require('stripe')(process.env.GATSBY_STRIPE_SECRET_KEY);
+const stripe = require('stripe')(process.env.GATSBY_STRIPE_SECRET_KEY, {
+  maxNetworkRetries: process.env.GATSBY_STRIPE_NETWORK_RETRIES,
+});
 
 exports.handler = async ({ body }) => {
   let status = false;
   let response;
+
+  const sessionData = await stripe.checkout.sessions.retrieve(
+    'cs_test_9DKbCxZEfMbQNIdHjBdWwbVGD8mZsT44IiZuvqnZYrmK9OFI2xd9MZtt',
+    { expand: ['line_items'] },
+  );
+  console.log('---------', { sessionData });
+  console.log(sessionData.line_items.data);
+
+  return;
+
+  // curl https://api.stripe.com/v1/checkout/sessions/cs_test_9DKbCxZEfMbQNIdHjBdWwbVGD8mZsT44IiZuvqnZYrmK9OFI2xd9MZtt \
+  // -u sk_test_qPtxyPuGXZFRcJocqjJx0kri004RAAO22Z:
 
   // await [
   //   // 'sku_HHGRnesYAQ8haG',

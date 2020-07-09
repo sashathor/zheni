@@ -9,10 +9,13 @@ const dispatchAvailableProducts = (payload) => ({
 
 export const checkProductsAvailability = async (shoppingCart) => {
   try {
-    const checkedSkusData = await axios.post('/.netlify/functions/check-sku', {
-      skus: shoppingCart.join(','),
-    });
-    return checkedSkusData.data.response;
+    const checkedProductsData = await axios.post(
+      '/.netlify/functions/check-products',
+      {
+        ids: shoppingCart.join(','),
+      },
+    );
+    return checkedProductsData.data.response;
   } catch (e) {
     return Promise.reject({ e });
   }

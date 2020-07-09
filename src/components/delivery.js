@@ -44,7 +44,7 @@ const Delivery = ({ onChange, setFetching, weight, disabled = false }) => {
     .sort((a, b) => a.name?.localeCompare(b.name));
 
   return (
-    <Box sx={{ border: '1px solid #e5e5e5' }} p={4} pb={5}>
+    <Box>
       <Text variant="text.upperCase" mb={3}>
         Send to...
       </Text>

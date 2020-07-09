@@ -25,16 +25,17 @@ const ProductTemplate = ({
     product: {
       title,
       images,
-      description: { json },
+      description,
       contentful_id: id,
-      stripeSku,
+      price,
+      stripeProduct,
     },
   },
 }) => {
   const imageSources = images.map((image) => image.fluid);
   const carousel = useCarousel();
   const { addToCart, isCartContains } = useCart();
-  const { price, currency, active } = stripeSku || {};
+  const active = stripeProduct?.active || false;
 
   return (
     <Layout page={{ meta_title: title }}>
@@ -75,8 +76,8 @@ const ProductTemplate = ({
           <Heading variant="styles.h4" mb={4}>
             {title}
           </Heading>
-          <Text mb={4}>{formatPrice(price, currency)}</Text>
-          <Text>{jsonToHTML(json)}</Text>
+          <Text mb={4}>{formatPrice(price)}</Text>
+          {description && <Text>{jsonToHTML(description.json)}</Text>}
           {isCartContains(id) || !active ? (
             <Message sx={{ borderRadius: 0 }}>
               <Text variant="text.upperCase">{!active ? 'Sold' : 'Added'}</Text>
@@ -100,7 +101,12 @@ export const pageQuery = graphql`
       title
       slug
       contentful_id
-      id
+      price
+      status
+
+      stripeProduct {
+        active
+      }
 
       description {
         json
@@ -111,12 +117,6 @@ export const pageQuery = graphql`
         fluid(maxWidth: 1200, quality: 90) {
           ...GatsbyContentfulFluid_withWebp
         }
-      }
-
-      stripeSku {
-        currency
-        price
-        active
       }
     }
   }

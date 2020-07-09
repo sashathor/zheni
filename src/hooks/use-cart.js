@@ -25,44 +25,42 @@ const useCart = () => {
   const isCartContains = (id) =>
     Array.isArray(shoppingCart) && shoppingCart.indexOf(id) > -1;
 
-  const redirectToCheckout = async ({ items, code }) => {
+  const redirectToCheckout = async ({ sessionId }) => {
     try {
       const loadStripe = await require('@stripe/stripe-js').loadStripe;
       const stripe = await loadStripe(
         process.env.GATSBY_STRIPE_PUBLISHABLE_KEY,
+        {
+          maxNetworkRetries: process.env.GATSBY_STRIPE_NETWORK_RETRIES,
+        },
       );
 
-      await stripe.redirectToCheckout({
-        items,
-        successUrl: `${window.location.origin}/order-confirmed/`,
-        cancelUrl: `${window.location.origin}/order-error`,
-        shippingAddressCollection: {
-          allowedCountries: [code],
-        },
-      });
+      const checkoutSettings = {
+        sessionId,
+      };
+
+      await stripe.redirectToCheckout(checkoutSettings);
     } catch (e) {
+      console.log({ e });
       return Promise.reject(new Error(500));
     }
   };
 
-  const setDelivery = async ({ items, delivery: { price, country, code } }) => {
-    let deliverySku;
+  const createSession = async (order) => {
+    let sessionId;
 
     try {
-      const deliverySkuData = await axios.post('/.netlify/functions/checkout', {
-        type: 'zheni.checkout.delivery',
-        price,
-        country,
-        code,
-      });
-      deliverySku = deliverySkuData.data.response.deliverySku;
-    } catch (e) {}
+      const sessionData = await axios.post(
+        '/.netlify/functions/create-checkout-session',
+        { order },
+      );
+      sessionId = sessionData.data.response.sessionId;
+    } catch (e) {
+      console.log({ e });
+    }
 
-    if (deliverySku) {
-      return await redirectToCheckout({
-        items: [...items, { sku: deliverySku, quantity: 1 }],
-        code,
-      });
+    if (sessionId) {
+      return await redirectToCheckout({ sessionId });
     }
 
     return Promise.reject(new Error(500));
@@ -72,6 +70,7 @@ const useCart = () => {
     event,
     items,
     delivery,
+    discount,
     unavailableProductsCallback,
     checkoutAfterCheck,
   }) => {
@@ -85,12 +84,14 @@ const useCart = () => {
       }
     }
 
-    return await setDelivery({
-      items: activeProducts.map(({ sku, quantity }) => ({
-        sku,
+    return await createSession({
+      items: activeProducts.map(({ id, quantity, price }) => ({
+        id,
         quantity,
+        price,
       })),
       delivery,
+      discount,
     });
   };
 

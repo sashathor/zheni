@@ -1,4 +1,6 @@
-const stripe = require('stripe')(process.env.GATSBY_STRIPE_SECRET_KEY);
+const stripe = require('stripe')(process.env.GATSBY_STRIPE_SECRET_KEY, {
+  maxNetworkRetries: process.env.GATSBY_STRIPE_NETWORK_RETRIES,
+});
 const functionResponse = require('./utils/function-response');
 
 exports.handler = async ({ body }) => {
@@ -6,15 +8,14 @@ exports.handler = async ({ body }) => {
   let response;
 
   try {
-    const skus = bodyData.skus;
-    if (skus) {
-      const ids = skus.split(',').filter((sku) => sku !== '');
-      const { data } = await stripe.skus.list({ ids });
+    if (bodyData.ids) {
+      const ids = bodyData.ids.split(',').filter((id) => id !== '');
+      const { data } = await stripe.products.list({ ids, limit: 100 });
       response = ids.map((id) => ({
         id,
-        status: ((sku) => {
-          if (sku) {
-            return sku.active ? 'active' : 'archived';
+        status: ((product) => {
+          if (product) {
+            return product.active ? 'active' : 'archived';
           }
           return 'not_found';
         })(data.find((item) => item.id === id)),

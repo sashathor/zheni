@@ -1,4 +1,6 @@
-const stripe = require('stripe')(process.env.GATSBY_STRIPE_SECRET_KEY);
+const stripe = require('stripe')(process.env.GATSBY_STRIPE_SECRET_KEY, {
+  maxNetworkRetries: process.env.GATSBY_STRIPE_NETWORK_RETRIES,
+});
 const functionResponse = require('./utils/function-response');
 
 const processProduct = async ({ id, title, active }) => {
@@ -29,36 +31,6 @@ const processProduct = async ({ id, title, active }) => {
   });
 };
 
-const processSku = async ({ id, title, price, active }) => {
-  let entity;
-
-  try {
-    entity = await stripe.skus.retrieve(id);
-  } catch (error) {
-    console.error(error);
-  }
-
-  const skuFields = {
-    price: Number(price['en-US']) * 100,
-    active,
-    attributes: {
-      name: title['en-US'],
-    },
-  };
-
-  if (entity) {
-    return await stripe.skus.update(id, { ...skuFields });
-  }
-
-  return await stripe.skus.create({
-    ...skuFields,
-    id,
-    product: id,
-    currency: 'eur',
-    inventory: { type: 'infinite' },
-  });
-};
-
 exports.handler = async (event) => {
   const { body, headers } = event;
   const data = body && JSON.parse(body);
@@ -74,8 +46,6 @@ exports.handler = async (event) => {
         sys: { contentType },
       } = data;
 
-      console.log({ data });
-
       if (contentType.sys.id === 'product') {
         const {
           sys: { id },
@@ -85,7 +55,6 @@ exports.handler = async (event) => {
         const active = status['en-US'] === 'Active';
 
         await processProduct({ id, title, active });
-        await processSku({ id, title, price, active });
 
         response = { status: true };
       }

@@ -18,6 +18,7 @@ import {
 } from 'theme-ui';
 import Layout from '../components/layout';
 import Delivery from '../components/delivery';
+import Discount from '../components/discount';
 import useCart from '../hooks/use-cart';
 import formatPrice from '../utils/format-price';
 
@@ -41,7 +42,7 @@ const RemoveButton = ({ onClick }) => (
 const CartPage = ({
   data: {
     page,
-    allStripeSku: { products },
+    allStripeProduct: { products },
   },
 }) => {
   const {
@@ -51,6 +52,7 @@ const CartPage = ({
   } = useCart();
 
   const [delivery, setDelivery] = useState();
+  const [discount, setDiscount] = useState();
   const [checkoutInProcess, setCheckoutInProcess] = useState(false);
   const [checkoutAfterCheck, setCheckoutAfterCheck] = useState(false);
   const [alertMessage, setAlertMessage] = useState();
@@ -60,8 +62,6 @@ const CartPage = ({
     (data) => setDelivery(data || undefined),
     [],
   );
-
-  // .filter(({ productContentful }) => productContentful)
 
   const productsList = products
     .filter(
@@ -84,8 +84,10 @@ const CartPage = ({
     await checkout({
       event,
       delivery,
-      items: productsList.map(({ id, active }) => ({
-        sku: id,
+      discount,
+      items: productsList.map(({ id, active, productContentful }) => ({
+        id,
+        price: productContentful.price,
         active,
         quantity: 1,
       })),
@@ -105,12 +107,15 @@ const CartPage = ({
     });
   };
 
-  const cost = {
-    subtotal: productsListActive.reduce((total, { price }) => total + price, 0),
-    getTotal: function () {
-      return this.subtotal + delivery?.price;
-    },
-  };
+  const getDelivery = () => (discount?.free_delivery ? 0 : delivery?.price);
+  const getSubtotal = () =>
+    productsListActive.reduce(
+      (total, { productContentful: { price } }) => total + price,
+      0,
+    );
+  const getDiscount = () =>
+    discount?.discount ? getSubtotal() * (discount.discount / 100) : 0;
+  const getTotal = () => getSubtotal() - getDiscount() + getDelivery();
 
   return (
     <Layout page={page}>
@@ -147,9 +152,8 @@ const CartPage = ({
           {productsList.map(
             ({
               id,
-              price,
               active,
-              productContentful: { title, slug, images },
+              productContentful: { title, slug, images, price },
             }) => (
               <Grid
                 key={id}
@@ -198,7 +202,7 @@ const CartPage = ({
           )}
           {productsListActive.length > 0 && (
             <Grid gap={[2, 4]} columns={[1, '3fr 2fr']}>
-              <Box mr={[0, '20%']}>
+              <Box p={4} sx={{ border: '1px solid #e5e5e5' }} mr={[0, '20%']}>
                 <Delivery
                   weight={productsListActive.reduce(
                     (total, { productContentful: { weight } }) =>
@@ -209,6 +213,16 @@ const CartPage = ({
                   onChange={onChangeDelivery}
                   disabled={checkoutInProcess}
                 />
+                <Box mt={4}>
+                  <Discount onCheck={setDiscount} />
+                  {discount === null && (
+                    <Box mt={1}>
+                      <Text variant="text.upperCase" color="#c0c0c0">
+                        Discount code is not valid
+                      </Text>
+                    </Box>
+                  )}
+                </Box>
               </Box>
               <Box pr={[0, 4]} pt={4}>
                 <Grid gap={[2, 3]} columns={2}>
@@ -216,21 +230,31 @@ const CartPage = ({
                     <Text variant="text.upperCase">Subtotal</Text>
                   </Box>
                   <Box sx={{ textAlign: 'right' }}>
-                    {formatPrice(cost.subtotal)}
+                    {formatPrice(getSubtotal())}
                   </Box>
-                  {delivery?.price && (
+                  {discount && (
+                    <Fragment>
+                      <Box>
+                        <Text variant="text.upperCase">Discount</Text>
+                      </Box>
+                      <Box sx={{ textAlign: 'right' }}>
+                        {`- ${formatPrice(getDiscount())}`}
+                      </Box>
+                    </Fragment>
+                  )}
+                  {(delivery?.price || discount?.free_delivery) && (
                     <Fragment>
                       <Box>
                         <Text variant="text.upperCase">Delivery</Text>
                       </Box>
                       <Box sx={{ textAlign: 'right' }}>
-                        {formatPrice(delivery.price)}
+                        {getDelivery() ? formatPrice(delivery.price) : 'FREE'}
                       </Box>
                       <Box>
                         <Text variant="text.upperCase">Total</Text>
                       </Box>
                       <Box sx={{ textAlign: 'right' }}>
-                        {formatPrice(cost.getTotal())}
+                        {formatPrice(getTotal())}
                       </Box>
                     </Fragment>
                   )}
@@ -269,14 +293,16 @@ export const pageQuery = graphql`
     page: contentfulPage(slug: { eq: $slug }) {
       ...PageData
     }
-    allStripeSku(sort: { order: DESC, fields: productContentful___updatedAt }) {
+    allStripeProduct(
+      sort: { order: DESC, fields: productContentful___updatedAt }
+    ) {
       products: nodes {
         id
-        price
         productContentful {
           title
           slug
           weight
+          price
           images {
             fluid {
               ...GatsbyContentfulFluid_withWebp

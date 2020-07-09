@@ -80,7 +80,7 @@ const ShopPage = ({
     page: {
       content: { json },
     },
-    allStripeSku: { products },
+    allStripeProduct: { products },
   },
 }) => (
   <Layout page={page}>
@@ -92,11 +92,9 @@ const ShopPage = ({
         .filter(({ productContentful }) => productContentful)
         .map(
           ({
-            active,
-            currency,
-            price,
             id,
-            productContentful: { title, slug, images },
+            active,
+            productContentful: { status, title, slug, images, price },
           }) => (
             <AspectRatio key={id} ratio={3 / 4}>
               <ProductLink to={`/shop/product/${slug}`}>
@@ -108,7 +106,7 @@ const ShopPage = ({
                 >
                   <div className="details">
                     <span>{title}</span>
-                    <p>{formatPrice(price, currency)}</p>
+                    <p>{formatPrice(price)}</p>
                     {!active && <p>SOLD</p>}
                   </div>
                 </BackgroundImage>
@@ -127,15 +125,17 @@ export const pageQuery = graphql`
     page: contentfulPage(slug: { eq: $slug }) {
       ...PageData
     }
-    allStripeSku(sort: { order: DESC, fields: productContentful___updatedAt }) {
+    allStripeProduct(
+      sort: { order: DESC, fields: productContentful___updatedAt }
+    ) {
       products: nodes {
-        currency
-        price
-        active
         id
+        active
         productContentful {
+          status
           title
           slug
+          price
           images {
             fluid {
               ...GatsbyContentfulFluid_withWebp

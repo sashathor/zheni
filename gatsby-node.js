@@ -80,12 +80,12 @@ exports.createPages = ({ graphql, actions }) => {
 exports.sourceNodes = ({ actions }) => {
   const { createTypes } = actions;
   createTypes(`
-    type StripeSku implements Node {
+    type StripeProduct implements Node {
       productContentful: ContentfulProduct @link(by: "contentful_id", from: "id")
     }
 
     type ContentfulProduct implements Node {
-      stripeSku: StripeSku @link(by: "id", from: "contentful_id")
+      stripeProduct: StripeProduct @link(by: "id", from: "contentful_id")
     }
   `);
 };
