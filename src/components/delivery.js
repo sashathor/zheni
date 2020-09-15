@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Box, Select, Text } from 'theme-ui';
+import { Box, Select, Text, Link } from 'theme-ui';
 import { countries as countriesData } from 'countries-list';
 
 const Delivery = ({ onChange, setFetching, weight, disabled = false }) => {
   const [code, setCode] = useState();
   const [countries, setCountries] = useState([]);
+  const [showContact, setShowContact] = useState(false);
 
   useEffect(() => {
     const fetchCountriesData = async () => {
@@ -25,6 +26,7 @@ const Delivery = ({ onChange, setFetching, weight, disabled = false }) => {
           data: { response },
         } = await axios.post(`/.netlify/functions/delivery`, { code, weight });
         onChange({ ...response, code, country: countriesData[code]?.name });
+        setShowContact(!response?.price);
       } catch (e) {
         onChange(undefined);
       }
@@ -61,6 +63,15 @@ const Delivery = ({ onChange, setFetching, weight, disabled = false }) => {
           </option>
         ))}
       </Select>
+      {showContact && (
+        <Box mt={2}>
+          <Text variant="text.upperCase" color="#c0c0c0">
+            Contact{' '}
+            <Link href="mailto:hello@zheni.studio">hello@zheni.studio</Link> for
+            delivery options
+          </Text>
+        </Box>
+      )}
     </Box>
   );
 };

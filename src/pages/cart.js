@@ -76,7 +76,7 @@ const CartPage = ({
   const productsListActive = productsList.filter(({ active }) => active);
 
   const isCheckoutAllowed = () =>
-    productsListActive.length > 0 && delivery !== undefined;
+    productsListActive.length > 0 && delivery?.price;
 
   const checkoutCart = async (event) => {
     setCheckoutInProcess(true);
@@ -259,6 +259,14 @@ const CartPage = ({
                     </Fragment>
                   )}
                 </Grid>
+                <Box sx={{ textAlign: 'right' }} mt={4}>
+                  {checkoutInProcess && <Spinner />}
+                  {!checkoutInProcess && isCheckoutAllowed() && (
+                    <Button onClick={(event) => checkoutCart(event)}>
+                      Checkout
+                    </Button>
+                  )}
+                </Box>
               </Box>
             </Grid>
           )}
@@ -273,13 +281,6 @@ const CartPage = ({
               {alertMessage}
             </Alert>
           )}
-
-          <Box sx={{ textAlign: 'right' }} mt={2}>
-            {checkoutInProcess && <Spinner />}
-            {!checkoutInProcess && isCheckoutAllowed() && (
-              <Button onClick={(event) => checkoutCart(event)}>Checkout</Button>
-            )}
-          </Box>
         </Fragment>
       )}
     </Layout>

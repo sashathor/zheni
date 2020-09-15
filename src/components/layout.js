@@ -34,6 +34,11 @@ const Layout = ({ children, subnavItems, page, theme = 'black' }) => {
           body {
             margin: 0;
           }
+
+          /* Quick fix for image carousel */
+          .react-images__view-image {
+            max-height: 90vh !important;
+          }
         `}
       />
       <Helmet>
