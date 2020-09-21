@@ -44,6 +44,10 @@ const Layout = ({ children, subnavItems, page, theme = 'black' }) => {
       <Helmet>
         <title>{meta_title}</title>
         <meta name="description" content={meta_description} />
+        <meta
+          name="p:domain_verify"
+          content="8e6b63387bd786744b1d82dfb4c180fc"
+        />
       </Helmet>
       <div
         sx={{
