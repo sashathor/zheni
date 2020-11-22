@@ -10,13 +10,23 @@ const AboutPage = ({
     page,
     page: {
       content: { json },
+      images,
     },
     aboutImg,
   },
 }) => (
   <Layout page={page}>
     <Grid gap={[0, 4]} columns={[1, '2fr 1fr']}>
-      <Box sx={{ textAlign: 'left' }}>{jsonToHTML(json)}</Box>
+      <Box sx={{ textAlign: 'left' }}>
+        {jsonToHTML(json)}
+        <Box css={{ display: 'flex' }}>
+          {images.map((image) => (
+            <Box key={image.id} mr={2} mt={2} css={{ width: 100 }}>
+              <Image fluid={image.fluid} alt={image.title} fadeIn />
+            </Box>
+          ))}
+        </Box>
+      </Box>
       <Box>
         <Image fluid={aboutImg.fluid} alt={aboutImg.description} fadeIn />
       </Box>

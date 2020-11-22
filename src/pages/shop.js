@@ -94,7 +94,7 @@ const ShopPage = ({
           ({
             id,
             active,
-            productContentful: { status, title, slug, images, price },
+            productContentful: { title, slug, images, price },
           }) => (
             <AspectRatio key={id} ratio={3 / 4}>
               <ProductLink to={`/shop/product/${slug}`}>
@@ -103,6 +103,7 @@ const ShopPage = ({
                   Tag="section"
                   fadeIn="soft"
                   sx={{ height: '100%' }}
+                  alt={images[0].title}
                 >
                   <div className="details">
                     <span>{title}</span>
@@ -137,6 +138,7 @@ export const pageQuery = graphql`
           slug
           price
           images {
+            title
             fluid {
               ...GatsbyContentfulFluid_withWebp
             }

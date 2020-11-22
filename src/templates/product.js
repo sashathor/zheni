@@ -45,7 +45,7 @@ const ProductTemplate = ({
             <Link href="#" onClick={(event) => carousel.toggle(event, 0)}>
               <Image
                 fluid={{ ...images[0].fluid, aspectRatio: 3 / 4 }}
-                alt={images[0].description}
+                alt={images[0].title}
                 fadeIn
               />
             </Link>
@@ -62,7 +62,7 @@ const ProductTemplate = ({
                     >
                       <Image
                         fluid={{ ...image.fluid, aspectRatio: 3 / 4 }}
-                        alt={image.description}
+                        alt={image.title}
                         fadeIn
                       />
                     </Link>
@@ -114,6 +114,7 @@ export const pageQuery = graphql`
 
       images {
         id
+        title
         fluid(maxWidth: 1200, quality: 90) {
           ...GatsbyContentfulFluid_withWebp
         }

@@ -45,6 +45,13 @@ export const pageQuery = graphql`
     content: childContentfulPageContentRichTextNode {
       json
     }
+    images {
+      id
+      title
+      fluid {
+        ...GatsbyContentfulFluid_withWebp
+      }
+    }
   }
   query($slug: String!) {
     page: contentfulPage(slug: { eq: $slug }) {
