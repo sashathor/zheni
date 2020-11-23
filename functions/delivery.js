@@ -1,6 +1,8 @@
 const axios = require('axios');
 const functionResponse = require('./utils/function-response');
 
+const DELIVERY_DISCOUNT = 10;
+
 exports.handler = async ({ body }) => {
   const { code, weight } = body ? JSON.parse(body) : {};
   let response;
@@ -16,8 +18,9 @@ exports.handler = async ({ body }) => {
         ({ type }) => type === (code.toUpperCase() === 'SK' ? 'ba' : 'b'),
       );
       if (product) {
+        const price = Number(product.price) - DELIVERY_DISCOUNT;
         response = {
-          price: Number(product.price),
+          price: price > 0 ? price : 3,
           days: product.delivery,
         };
       }
