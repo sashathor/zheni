@@ -7,6 +7,7 @@ import styled from '@emotion/styled';
 import { Container, jsx } from 'theme-ui';
 import Header from './header';
 import Footer from './footer';
+import Gdpr from './gdpr';
 
 const LayoutContainer = styled(Container)`
   max-width: 90vw;
@@ -65,6 +66,7 @@ const Layout = ({ children, subnavItems, page, theme = 'black' }) => {
             <Footer theme={theme} />
           </LayoutContainer>
         )}
+        <Gdpr />
       </div>
     </Fragment>
   );

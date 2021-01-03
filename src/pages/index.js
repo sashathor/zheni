@@ -1,12 +1,21 @@
-import React from 'react';
+/** @jsx jsx */
+
 import { graphql } from 'gatsby';
 import { css } from '@emotion/core';
+import { Flex, jsx } from 'theme-ui';
 import BackgroundImage from 'gatsby-background-image';
 import Image from 'gatsby-image';
 
 import Layout from '../components/layout';
 
-const HomePage = ({ data: { page, bgImage, logoWhiteBig } }) => (
+const HomePage = ({
+  data: {
+    page,
+    bgImage,
+    logoWhiteBig,
+    allContentfulAsset: { featuredLogos },
+  },
+}) => (
   <Layout page={page} theme="white">
     <BackgroundImage
       Tag="div"
@@ -32,6 +41,43 @@ const HomePage = ({ data: { page, bgImage, logoWhiteBig } }) => (
         margin: 10vh auto;
       `}
     />
+    <Flex
+      sx={{
+        justifyContent: 'center',
+        position: 'absolute',
+        bottom: 10,
+        left: 0,
+        right: 0,
+        flexWrap: 'wrap',
+        marginLeft: 10,
+        marginRight: 10,
+      }}
+    >
+      {featuredLogos &&
+        featuredLogos.map((featuredLogo, index) => (
+          <Flex
+            key={featuredLogo.id}
+            sx={{
+              backgroundColor: '#ffffff',
+              opacity: [0.8, 0.5],
+              margin: 10,
+              // marginLeft: index === 0 ? 0 : 20,
+              padding: 10,
+              width: ['20vw', '10vw'],
+              maxWidth: 100,
+            }}
+          >
+            <Image
+              fluid={{ ...featuredLogo.fluid, aspectRatio: 4 / 3 }}
+              imgStyle={{ objectFit: 'contain' }}
+              style={{ height: '100%', width: '100%' }}
+              alt={featuredLogo.description}
+              title={featuredLogo.description}
+              fadeIn
+            />
+          </Flex>
+        ))}
+    </Flex>
   </Layout>
 );
 
@@ -65,6 +111,15 @@ export const pageQuery = graphql`
     logoWhiteBig: contentfulAsset(title: { eq: "logo-white-big" }) {
       fluid {
         ...GatsbyContentfulFluid_withWebp
+      }
+    }
+    allContentfulAsset(filter: { title: { eq: "featured-logo" } }) {
+      featuredLogos: nodes {
+        id
+        description
+        fluid(maxWidth: 100, maxHeight: 100) {
+          ...GatsbyContentfulFluid_withWebp
+        }
       }
     }
   }

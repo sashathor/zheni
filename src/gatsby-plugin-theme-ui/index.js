@@ -28,6 +28,9 @@ export default {
     upperCase: {
       textTransform: 'uppercase',
     },
+    caps: {
+      variant: 'styles.caps',
+    },
   },
   buttons: {
     primary: {
@@ -73,6 +76,9 @@ export default {
     h5: {
       fontSize: 20,
       marginBottom: 4,
+    },
+    caps: {
+      fontSize: 12,
     },
     p: {
       marginBottom: 4,
