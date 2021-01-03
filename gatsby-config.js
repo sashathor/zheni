@@ -46,24 +46,12 @@ module.exports = {
       },
     },
     {
-      resolve: 'gatsby-plugin-prefetch-google-fonts',
+      resolve: 'gatsby-plugin-google-fonts',
       options: {
         fonts: [
-          {
-            family: 'Roboto',
-            subsets: ['latin'],
-            variants: [
-              '300',
-              '300i',
-              '400',
-              '400i',
-              '500',
-              '500i',
-              '700',
-              '700i',
-            ],
-          },
+          'roboto:300,300i,400,400i,500,500i,700,700i', // you can also specify font weights and styles
         ],
+        display: 'swap',
       },
     },
     {
