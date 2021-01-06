@@ -12,7 +12,7 @@
     "@emotion/core": "^10.0.28",
     "@emotion/styled": "^10.0.27",
     "@stripe/stripe-js": "^1.4.0",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "countries-list": "^2.5.4",
     "gatsby": "^2.21.32",
     "gatsby-background-image": "^1.1.1",
