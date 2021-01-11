@@ -1,7 +1,7 @@
 const axios = require('axios');
 const functionResponse = require('./utils/function-response');
 
-const DELIVERY_DISCOUNT = 10;
+const DELIVERY_DISCOUNT = 0;
 
 exports.handler = async ({ body }) => {
   const { code, weight } = body ? JSON.parse(body) : {};
