@@ -18,7 +18,9 @@ exports.handler = async ({ body }) => {
         ({ type }) => type === (code.toUpperCase() === 'SK' ? 'ba' : 'b'),
       );
       if (product) {
-        const price = Number(product.price) - DELIVERY_DISCOUNT;
+        const price = Number(
+          (Number(product.price) - DELIVERY_DISCOUNT).toFixed(2),
+        );
         response = {
           price: price > 0 ? price : 3,
           days: product.delivery,
