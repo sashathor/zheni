@@ -61,7 +61,7 @@ exports.handler = async ({ body, headers }) => {
     }
 
     const sessionParams = {
-      payment_method_types: ['card'],
+      payment_method_types: ['card', 'sofort'],
       mode: 'payment',
       locale: 'en',
       line_items,
