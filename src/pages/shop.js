@@ -1,5 +1,6 @@
 /** @jsx jsx */
 
+import { Fragment } from 'react';
 import { graphql } from 'gatsby';
 import BackgroundImage from 'gatsby-background-image';
 import { Link } from 'gatsby';
@@ -94,7 +95,7 @@ const ShopPage = ({
           ({
             id,
             active,
-            productContentful: { title, slug, images, price },
+            productContentful: { title, slug, images, price, status },
           }) => (
             <AspectRatio key={id} ratio={3 / 4}>
               <ProductLink to={`/shop/product/${slug}`}>
@@ -107,8 +108,12 @@ const ShopPage = ({
                 >
                   <div className="details">
                     <span>{title}</span>
-                    <p>{formatPrice(price)}</p>
-                    {!active && <p>SOLD</p>}
+                    {status === 'OnRequest' ? <p>Price on request</p> : (
+                      <Fragment>
+                        <p>{formatPrice(price)}</p>
+                        {!active && <p>SOLD</p>}
+                      </Fragment>
+                    )}
                   </div>
                 </BackgroundImage>
               </ProductLink>

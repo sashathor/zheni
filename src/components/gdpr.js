@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import { Alert, Close, Link, Text } from 'theme-ui';
 import { useCookies } from 'react-cookie';
@@ -17,7 +17,13 @@ const GdprStyled = styled('div')`
 
 const Gdpr = () => {
   const [cookies, setCookie] = useCookies([GDPR_COOKIE_NAME]);
-  const [open, setOpen] = useState(cookies[GDPR_COOKIE_NAME] === undefined);
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (cookies[GDPR_COOKIE_NAME] === undefined) {
+      setTimeout(() => setOpen(true), 2000);
+    }
+  }, [cookies]);
 
   const acceptCookies = () => {
     setCookie(GDPR_COOKIE_NAME, true);
