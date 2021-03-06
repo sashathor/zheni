@@ -28,6 +28,7 @@ const ProductTemplate = ({
       description,
       contentful_id: id,
       price,
+      status,
       stripeProduct,
     },
   },
@@ -36,6 +37,19 @@ const ProductTemplate = ({
   const carousel = useCarousel();
   const { addToCart, isCartContains } = useCart();
   const active = stripeProduct?.active || false;
+
+  const isOnRequest = status === 'OnRequest';
+
+  const productState =
+    isCartContains(id) || !active ? (
+      <Message sx={{ borderRadius: 0 }}>
+        <Text variant="text.upperCase">{!active ? 'Sold' : 'Added'}</Text>
+      </Message>
+    ) : (
+      <Button onClick={() => addToCart({ id, price, quantity: 1 })}>
+        Add to cart
+      </Button>
+    );
 
   return (
     <Layout page={{ meta_title: title }}>
@@ -76,17 +90,17 @@ const ProductTemplate = ({
           <Heading variant="styles.h4" mb={4}>
             {title}
           </Heading>
-          <Text mb={4}>{formatPrice(price)}</Text>
-          {description && <Text>{jsonToHTML(description.json)}</Text>}
-          {isCartContains(id) || !active ? (
-            <Message sx={{ borderRadius: 0 }}>
-              <Text variant="text.upperCase">{!active ? 'Sold' : 'Added'}</Text>
-            </Message>
+
+          {isOnRequest ? (
+            <Text mb={4} color="#c0c0c0" variant="text.upperCase">
+              Price on request
+            </Text>
           ) : (
-            <Button onClick={() => addToCart({ id, price, quantity: 1 })}>
-              Add to cart
-            </Button>
+            <Text mb={4}>{formatPrice(price)}</Text>
           )}
+
+          {description && <Text>{jsonToHTML(description.json)}</Text>}
+          {!isOnRequest && productState}
         </Box>
       </Grid>
     </Layout>
