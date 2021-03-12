@@ -90,7 +90,10 @@ const ShopPage = ({
     </Box>
     <Grid gap={[3, 4]} columns={[2, 3]}>
       {products
-        .filter(({ productContentful }) => productContentful)
+        .filter(
+          ({ productContentful }) =>
+            productContentful && productContentful.status !== 'DirectLink',
+        )
         .map(
           ({
             id,
@@ -108,7 +111,9 @@ const ShopPage = ({
                 >
                   <div className="details">
                     <span>{title}</span>
-                    {status === 'OnRequest' ? <p>Price on request</p> : (
+                    {status === 'OnRequest' ? (
+                      <p>Price on request</p>
+                    ) : (
                       <Fragment>
                         <p>{formatPrice(price)}</p>
                         {!active && <p>SOLD</p>}

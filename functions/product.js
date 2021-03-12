@@ -52,7 +52,7 @@ exports.handler = async (event) => {
           fields: { title, price, status },
         } = data;
 
-        const active = status['en-US'] === 'Active';
+        const active = status['en-US'] !== 'Sold';
 
         await processProduct({ id, title, active });
 
