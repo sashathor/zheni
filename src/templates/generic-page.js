@@ -32,8 +32,8 @@ export const pageQuery = graphql`
       meta_description
       title
       slug
-      content: childContentfulPageContentRichTextNode {
-        json
+      content {
+        json: raw
       }
     }
   }

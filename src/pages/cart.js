@@ -57,7 +57,7 @@ const CartPage = ({
   const [checkoutAfterCheck, setCheckoutAfterCheck] = useState(false);
   const [alertMessage, setAlertMessage] = useState();
 
-  const setDeliveryFetching = useCallback(setCheckoutInProcess, []);
+  const setDeliveryFetching = useCallback(setCheckoutInProcess, [setCheckoutInProcess]);
   const onChangeDelivery = useCallback(
     (data) => setDelivery(data || undefined),
     [],

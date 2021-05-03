@@ -1,7 +1,7 @@
 /** @jsx jsx */
 
 import { graphql } from 'gatsby';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import { Flex, jsx } from 'theme-ui';
 import BackgroundImage from 'gatsby-background-image';
 import Image from 'gatsby-image';
@@ -88,8 +88,8 @@ export const pageQuery = graphql`
     meta_title
     meta_description
     title
-    content: childContentfulPageContentRichTextNode {
-      json
+    content {
+      json: raw
     }
     images {
       id
