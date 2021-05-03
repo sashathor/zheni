@@ -2,7 +2,7 @@
 
 import { Fragment } from 'react';
 import Helmet from 'react-helmet';
-import { Global, css } from '@emotion/core';
+import { Global, css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { Container, jsx } from 'theme-ui';
 import Header from './header';

@@ -91,14 +91,15 @@ const ProductTemplate = ({
             {title}
           </Heading>
 
-          {isOnRequest ? (
-            <Text mb={4} color="#c0c0c0" variant="text.upperCase">
-              Price on request
-            </Text>
-          ) : (
-            <Text mb={4}>{formatPrice(price)}</Text>
-          )}
-
+          <Box mb={4}>
+            {isOnRequest ? (
+              <Text mb={4} color="#c0c0c0" variant="text.upperCase">
+                Price on request
+              </Text>
+            ) : (
+              <Text mb={4}>{formatPrice(price)}</Text>
+            )}
+          </Box>
           {description && <Text>{jsonToHTML(description.json)}</Text>}
           {!isOnRequest && productState}
         </Box>
@@ -123,7 +124,7 @@ export const pageQuery = graphql`
       }
 
       description {
-        json
+        json: raw
       }
 
       images {
