@@ -19,8 +19,10 @@ exports.createPages = ({ graphql, actions }) => {
   const { createPage } = actions;
 
   return new Promise((resolve, reject) => {
-    const productTemplate = path.resolve('./src/templates/product.js');
-    const genericPageTemplate = path.resolve('./src/templates/generic-page.js');
+    const productTemplate = path.resolve('./src/templates/product.tsx');
+    const genericPageTemplate = path.resolve(
+      './src/templates/generic-page.tsx',
+    );
 
     resolve(
       graphql(
@@ -62,7 +64,7 @@ exports.createPages = ({ graphql, actions }) => {
 
         const pages = result.data.allContentfulPage.nodes;
         pages.forEach(({ slug }) => {
-          if (!fs.existsSync(`./src/pages/${slug}.js`) && slug !== 'home') {
+          if (!fs.existsSync(`./src/pages/${slug}.tsx`) && slug !== 'home') {
             createPage({
               path: `/${slug}/`,
               component: genericPageTemplate,

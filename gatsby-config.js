@@ -1,3 +1,5 @@
+const path = require('path');
+
 require('dotenv').config({
   path: `.env.${process.env.NODE_ENV}`,
 });
@@ -58,6 +60,18 @@ module.exports = {
       resolve: 'gatsby-plugin-google-analytics',
       options: {
         trackingId: process.env.GATSBY_GOOGLE_ANALYTICS_KEY,
+      },
+    },
+    {
+      resolve: 'gatsby-plugin-root-import',
+      options: {
+        src: path.join(__dirname, 'src'),
+        components: path.join(__dirname, 'src/components'),
+        context: path.join(__dirname, 'src/context'),
+        hooks: path.join(__dirname, 'src/hooks'),
+        pages: path.join(__dirname, 'src/pages'),
+        templates: path.join(__dirname, 'src/templates'),
+        utils: path.join(__dirname, 'src/utils'),
       },
     },
   ],

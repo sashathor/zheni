@@ -13,3 +13,13 @@ Run a production build into `./public`. The result is ready to be put on any sta
 ### `npm run serve`
 
 Spin up a production-ready server with your blog. Don't forget to build your page beforehand.
+
+### Features
+
+- Netlify functions (backend)
+- Integration with Contentful (CMS)
+- Integration with Stripe (payments)
+- Barrels
+- Feature based file structure
+- React: hooks, functional components, context api, typescript
+-
