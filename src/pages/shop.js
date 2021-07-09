@@ -5,7 +5,7 @@ import { graphql } from 'gatsby';
 import BackgroundImage from 'gatsby-background-image';
 import { Link } from 'gatsby';
 import styled from '@emotion/styled';
-import { AspectRatio, Box, Grid, jsx } from 'theme-ui';
+import { AspectRatio, Heading, Box, Grid, jsx } from 'theme-ui';
 
 import Layout from '../components/layout';
 import formatPrice from '../utils/format-price';
@@ -27,6 +27,9 @@ const ProductLink = styled(Link)`
     span {
       padding-top: 0;
       display: block;
+      /* white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis; */
     }
   }
 
@@ -48,6 +51,9 @@ const ProductLink = styled(Link)`
       span {
         display: block;
         padding-top: 45%;
+        /* white-space: normal;
+        overflow: visible;
+        text-overflow: initial; */
       }
     }
 
@@ -81,51 +87,72 @@ const ShopPage = ({
     page: {
       content: { json },
     },
-    allStripeProduct: { products },
+    allContentfulCategory: { categories },
+    allStripeProduct: { productCategories },
   },
 }) => (
   <Layout page={page}>
-    <Box pb={[0, 4]} sx={{ textAlign: 'left' }}>
+    <Box pb={[0, 2]} sx={{ textAlign: 'left' }}>
       {jsonToHTML(json)}
     </Box>
-    <Grid gap={[3, 4]} columns={[2, 3]}>
-      {products
-        .filter(
-          ({ productContentful }) =>
-            productContentful && productContentful.status !== 'DirectLink',
-        )
-        .map(
-          ({
-            id,
-            active,
-            productContentful: { title, slug, images, price, status },
-          }) => (
-            <AspectRatio key={id} ratio={3 / 4}>
-              <ProductLink to={`/shop/product/${slug}`}>
-                <BackgroundImage
-                  fluid={images[0].fluid}
-                  Tag="section"
-                  fadeIn="soft"
-                  sx={{ height: '100%' }}
-                  alt={images[0].title}
-                >
-                  <div className="details">
-                    <span>{title}</span>
-                    {status === 'OnRequest' ? (
-                      <p>Price on request</p>
-                    ) : (
-                      <Fragment>
-                        <p>{formatPrice(price)}</p>
-                        {!active && <p>SOLD</p>}
-                      </Fragment>
-                    )}
-                  </div>
-                </BackgroundImage>
-              </ProductLink>
-            </AspectRatio>
+    <Box>
+      {categories
+        .filter((category) =>
+          productCategories.find(
+            (productCategory) => productCategory.fieldValue === category.id,
           ),
-        )}
-    </Grid>
+        )
+        .map((category) => (
+          <Box key={category.id} mb={[4, 5]}>
+            <Heading variant="text.shopCategory" mb={3}>
+              {category.title}
+            </Heading>
+            <Grid gap={[3, 4]} columns={[2, 3]} mt={2}>
+              {productCategories
+                .find(
+                  (productCategory) =>
+                    productCategory.fieldValue === category.id,
+                )
+                ?.products.filter(
+                  ({ productContentful }) =>
+                    productContentful &&
+                    productContentful.status !== 'DirectLink',
+                )
+                .map(
+                  ({
+                    id,
+                    active,
+                    productContentful: { title, slug, images, price, status },
+                  }) => (
+                    <AspectRatio key={id} ratio={3 / 4}>
+                      <ProductLink to={`/shop/product/${slug}`}>
+                        <BackgroundImage
+                          fluid={images[0].fluid}
+                          Tag="section"
+                          fadeIn="soft"
+                          sx={{ height: '100%' }}
+                          alt={images[0].title}
+                        >
+                          <div className="details">
+                            <span title={title}>{title}</span>
+                            {status === 'OnRequest' ? (
+                              <p>Price on request</p>
+                            ) : (
+                              <Fragment>
+                                <p>{formatPrice(price)}</p>
+                                {!active && <p>SOLD</p>}
+                              </Fragment>
+                            )}
+                          </div>
+                        </BackgroundImage>
+                      </ProductLink>
+                    </AspectRatio>
+                  ),
+                )}
+            </Grid>
+          </Box>
+        ))}
+    </Box>
   </Layout>
 );
 
@@ -136,21 +163,30 @@ export const pageQuery = graphql`
     page: contentfulPage(slug: { eq: $slug }) {
       ...PageData
     }
+    allContentfulCategory(sort: { fields: updatedAt, order: DESC }) {
+      categories: nodes {
+        title
+        id
+      }
+    }
     allStripeProduct(
       sort: { order: DESC, fields: productContentful___updatedAt }
     ) {
-      products: nodes {
-        id
-        active
-        productContentful {
-          status
-          title
-          slug
-          price
-          images {
+      productCategories: group(field: productContentful___category___id) {
+        fieldValue
+        products: nodes {
+          id
+          active
+          productContentful {
+            status
             title
-            fluid {
-              ...GatsbyContentfulFluid_withWebp
+            slug
+            price
+            images {
+              title
+              fluid {
+                ...GatsbyContentfulFluid_withWebp
+              }
             }
           }
         }
