@@ -25,6 +25,10 @@ const theme = {
       textAlign: ['left', 'center'],
       variant: 'styles.h4',
     },
+    shopCategory: {
+      variant: 'styles.h4',
+      textTransform: 'uppercase',
+    },
     upperCase: {
       textTransform: 'uppercase',
     },
@@ -98,4 +102,4 @@ const theme = {
   },
 };
 
-export default theme
+export default theme;
