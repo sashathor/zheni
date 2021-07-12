@@ -8,10 +8,7 @@ import jsonToHTML from '../utils/json-to-html';
 const OrderConfirmedPage = ({
   data: {
     page,
-    page: {
-      title,
-      content: { json },
-    },
+    page: { title, content },
   },
 }) => {
   const { clearCart } = useCart();
@@ -24,7 +21,7 @@ const OrderConfirmedPage = ({
         <Heading variant="styles.h4" mb={4}>
           {title}
         </Heading>
-        {jsonToHTML(json)}
+        {jsonToHTML(content?.json)}
       </Box>
     </Layout>
   );

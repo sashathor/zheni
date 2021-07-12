@@ -84,17 +84,17 @@ const ProductLink = styled(Link)`
 const ShopPage = ({
   data: {
     page,
-    page: {
-      content: { json },
-    },
+    page: { content },
     allContentfulCategory: { categories },
     allStripeProduct: { productCategories },
   },
 }) => (
   <Layout page={page}>
-    <Box pb={[0, 2]} sx={{ textAlign: 'left' }}>
-      {jsonToHTML(json)}
-    </Box>
+    {content && (
+      <Box pb={[0, 2]} sx={{ textAlign: 'left' }}>
+        {jsonToHTML(content.json)}
+      </Box>
+    )}
     <Box>
       {categories
         .filter((category) =>

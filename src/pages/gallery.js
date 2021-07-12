@@ -21,10 +21,7 @@ const GalleryImage = styled(Image)`
 const GalleryPage = ({
   data: {
     page,
-    page: {
-      content: { json },
-      images,
-    },
+    page: { content, images },
   },
 }) => {
   const imageSources = images.map((image) => image.fluid);
@@ -49,9 +46,11 @@ const GalleryPage = ({
         </Link>
       ))}
       <Carousel carousel={carousel} images={imageSources} />
-      <Box pb={4} sx={{ textAlign: 'center', color: 'secondary', mt: 4 }}>
-        {jsonToHTML(json)}
-      </Box>
+      {content && (
+        <Box pb={4} sx={{ textAlign: 'center', color: 'secondary', mt: 4 }}>
+          {jsonToHTML(content.json)}
+        </Box>
+      )}
     </Layout>
   );
 };

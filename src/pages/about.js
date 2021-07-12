@@ -20,10 +20,7 @@ const ImageStyled = styled(Image)`
 const AboutPage = ({
   data: {
     page,
-    page: {
-      content: { json },
-      images,
-    },
+    page: { content, images },
     aboutImg,
   },
 }) => {
@@ -34,7 +31,7 @@ const AboutPage = ({
     <Layout page={page}>
       <Grid gap={[0, 4]} columns={[1, '2fr 1fr']}>
         <Box sx={{ textAlign: 'left', order: [2, 1] }}>
-          {jsonToHTML(json)}
+          {jsonToHTML(content?.json)}
           <Box css={{ display: 'flex' }}>
             {images.map((image, idx) => (
               <Box key={image.id} mr={2} mt={2} css={{ width: 100 }}>

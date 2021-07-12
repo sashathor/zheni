@@ -7,10 +7,7 @@ import jsonToHTML from '../utils/json-to-html';
 const GenericPageTemplate = ({
   data: {
     page,
-    page: {
-      title,
-      content: { json },
-    },
+    page: { title, content },
   },
 }) => (
   <Layout page={page}>
@@ -18,7 +15,7 @@ const GenericPageTemplate = ({
       <Heading variant="styles.h4" mb={4}>
         {title}
       </Heading>
-      {jsonToHTML(json)}
+      {jsonToHTML(content?.json)}
     </Box>
   </Layout>
 );
