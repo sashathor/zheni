@@ -9,9 +9,7 @@ import { Grid, Box, jsx } from 'theme-ui';
 const ContactPage = ({
   data: {
     page,
-    page: {
-      content: { json },
-    },
+    page: { content },
     contactImg,
   },
 }) => (
@@ -20,9 +18,11 @@ const ContactPage = ({
       <Box sx={{ order: 2 }}>
         <Image fluid={contactImg.fluid} alt={contactImg.description} fadeIn />
       </Box>
-      <Box sx={{ textAlign: ['left', 'right'], order: 1 }}>
-        {jsonToHTML(json)}
-      </Box>
+      {content && (
+        <Box sx={{ textAlign: ['left', 'right'], order: 1 }}>
+          {jsonToHTML(content.json)}
+        </Box>
+      )}
     </Grid>
   </Layout>
 );
