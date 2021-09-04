@@ -58,7 +58,7 @@ const HomePage: React.FC<HomePageProps> = ({
       alt="Zheni"
       fadeIn
       sx={{
-        position: 'absolute',
+        position: 'absolute !important',
         width: '50%',
         margin: 'auto',
         top: '40%',
