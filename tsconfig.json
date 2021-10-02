@@ -1,16 +1,25 @@
 {
   "compilerOptions": {
     "baseUrl": "./src",
-    "module": "commonjs",
+    "module": "esnext",
     "target": "es6",
     "jsx": "preserve",
-    "lib": ["dom", "es2015", "es2017"],
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
     "strict": true,
     "noEmit": true,
     "isolatedModules": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "removeComments": false
+    "removeComments": false,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "declaration": true,
+    "declarationMap": true,
+    "outDir": "dist"
   },
   "include": ["./src/**/*", "./functions/**/*"]
 }
