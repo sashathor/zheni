@@ -141,12 +141,14 @@ const ShopPage: React.FC<ShopPageProps> = ({
                         >
                           <div className="details">
                             <span title={title}>{title}</span>
-                            {status === 'OnRequest' ? (
-                              <p>Price on request</p>
-                            ) : (
+                            {status === 'OnRequest' && <p>Price on request</p>}
+                            {status !== 'OnRequest' && (
                               <Fragment>
                                 <p>{formatPrice(price)}</p>
-                                {!active && <p>SOLD</p>}
+                                {!active && status !== 'PreOrder' && (
+                                  <p>SOLD</p>
+                                )}
+                                {status === 'PreOrder' && <p>PRE-ORDER</p>}
                               </Fragment>
                             )}
                           </div>

@@ -1,5 +1,6 @@
 /** @jsx jsx */
 
+import { Fragment } from 'react';
 import { graphql } from 'gatsby';
 import Image from 'gatsby-image';
 import {
@@ -30,6 +31,9 @@ type Product = {
   stripeProduct: {
     active: boolean;
   };
+  preOrderTerms: {
+    json: any;
+  };
 };
 
 interface ProductTemplateProps {
@@ -48,6 +52,7 @@ const ProductTemplate: React.FC<ProductTemplateProps> = ({
       price,
       status,
       stripeProduct,
+      preOrderTerms,
     },
   },
 }) => {
@@ -63,7 +68,7 @@ const ProductTemplate: React.FC<ProductTemplateProps> = ({
   const isOnRequest = status === 'OnRequest';
 
   const productState =
-    isCartContains(id) || !active ? (
+    isCartContains(id) || (!active && status !== 'PreOrder') ? (
       <Message sx={{ borderRadius: 0 }}>
         <Text variant="text.upperCase">{!active ? 'Sold' : 'Added'}</Text>
       </Message>
@@ -111,15 +116,29 @@ const ProductTemplate: React.FC<ProductTemplateProps> = ({
           </Heading>
 
           <Box mb={4}>
-            {isOnRequest ? (
+            {isOnRequest && (
               <Text mb={4} color="#c0c0c0" variant="text.upperCase">
                 Price on request
               </Text>
-            ) : (
-              <Text mb={4}>{formatPrice(price)}</Text>
+            )}
+            {!isOnRequest && (
+              <Fragment>
+                <Text mb={4}>
+                  {formatPrice(price)}
+                  {status === 'PreOrder' && <p>PRE-ORDER</p>}
+                </Text>
+              </Fragment>
             )}
           </Box>
           {description && <Text>{jsonToHTML(description.json)}</Text>}
+          {status === 'PreOrder' && preOrderTerms && (
+            <Fragment>
+              <Heading variant="styles.h4" mb={4}>
+                PRE ORDER TERMS
+              </Heading>
+              <Text>{jsonToHTML(preOrderTerms.json)}</Text>
+            </Fragment>
+          )}
           {!isOnRequest && productState}
         </Box>
       </Grid>
@@ -137,6 +156,9 @@ export const pageQuery = graphql`
       contentful_id
       price
       status
+      preOrderTerms {
+        json: raw
+      }
 
       stripeProduct {
         active

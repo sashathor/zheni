@@ -27,6 +27,7 @@ export type Product = {
     weight: number;
     price: number;
     images: Image[];
+    status: 'Active' | 'Sold' | 'OnRequest' | 'DirectLink' | 'PreOrder';
   };
 };
 
