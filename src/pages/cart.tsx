@@ -1,6 +1,6 @@
 /** @jsx jsx */
 
-import { Fragment, useState, useCallback } from 'react';
+import { Fragment, useState, useCallback, useMemo } from 'react';
 import { graphql } from 'gatsby';
 import Image from 'gatsby-image';
 import { Link } from 'gatsby';
@@ -65,6 +65,7 @@ const CartPage: React.FC<CartPageProps> = ({
   const [checkoutInProcess, setCheckoutInProcess] = useState(false);
   const [checkoutAfterCheck, setCheckoutAfterCheck] = useState(false);
   const [alertMessage, setAlertMessage] = useState<string | undefined>();
+  const [acceptPreOrderTerms, setAcceptPreOrderTerms] = useState(false);
 
   const setDeliveryFetching = useCallback(setCheckoutInProcess, [
     setCheckoutInProcess,
@@ -74,18 +75,32 @@ const CartPage: React.FC<CartPageProps> = ({
     [],
   );
 
-  const productsList = products
-    .filter(
-      ({ id, productContentful }) =>
-        productContentful && shoppingCart.indexOf(id) > -1,
-    )
-    .map((product) => ({
-      ...product,
-      active:
-        availableProducts && product
-          ? availableProducts.indexOf(product.id) > -1
-          : false,
-    }));
+  const productsList = useMemo(
+    () =>
+      products
+        .filter(
+          ({ id, productContentful }) =>
+            productContentful && shoppingCart.indexOf(id) > -1,
+        )
+        .map((product) => ({
+          ...product,
+          active:
+            availableProducts && product
+              ? availableProducts.indexOf(product.id) > -1
+              : false,
+        })),
+    [availableProducts, products],
+  );
+
+  const isPreOrder = useMemo(
+    () =>
+      Boolean(
+        productsList.find(
+          ({ productContentful: { status } }) => status === 'PreOrder',
+        ),
+      ),
+    [productsList],
+  );
 
   const productsListActive = productsList.filter(({ active }) => active);
 
@@ -97,6 +112,13 @@ const CartPage: React.FC<CartPageProps> = ({
   ) => {
     if (!delivery) {
       throw new Error('Delivery is undefined');
+    }
+
+    if (isPreOrder && !acceptPreOrderTerms) {
+      setAlertMessage(
+        'Please confirm that you agree with the terms and conditions of PRE-ORDER item(s) to check out.',
+      );
+      return;
     }
 
     setCheckoutInProcess(true);
@@ -174,7 +196,7 @@ const CartPage: React.FC<CartPageProps> = ({
             ({
               id,
               active,
-              productContentful: { title, slug, images, price },
+              productContentful: { title, slug, images, price, status },
             }) => (
               <Grid
                 key={id}
@@ -209,6 +231,7 @@ const CartPage: React.FC<CartPageProps> = ({
                 </Box>
                 <Box sx={{ textAlign: ['left', 'right'] }} pr={4}>
                   {availableProducts && (active ? formatPrice(price) : 'Sold')}
+                  {status === 'PreOrder' && <p>PRE-ORDER</p>}
                 </Box>
                 <Box sx={{ display: ['block', 'none'] }}>
                   <ThemeLink onClick={() => removeFromCart({ id })}>
@@ -219,8 +242,8 @@ const CartPage: React.FC<CartPageProps> = ({
             ),
           )}
           {productsListActive.length > 0 && (
-            <Grid gap={[2, 4]} columns={[1, '3fr 2fr']}>
-              <Box p={4} sx={{ border: '1px solid #e5e5e5' }} mr={[0, '20%']}>
+            <Grid gap={[2, 4]} columns={[1, '5fr 4fr']}>
+              <Box p={4} sx={{ border: '1px solid #e5e5e5' }} mr={[0, '15%']}>
                 <Delivery
                   weight={productsListActive.reduce(
                     (total, { productContentful: { weight } }) =>
@@ -279,6 +302,23 @@ const CartPage: React.FC<CartPageProps> = ({
                     </Fragment>
                   )}
                 </Grid>
+                {isPreOrder && isCheckoutAllowed() && (
+                  <Box mt={4} style={{ position: 'relative' }} pl="24px">
+                    <input
+                      checked={acceptPreOrderTerms}
+                      onChange={() =>
+                        setAcceptPreOrderTerms(!acceptPreOrderTerms)
+                      }
+                      type="checkbox"
+                      id="accept-pre-order-terms"
+                      style={{ position: 'absolute', left: '2px', top: '4px' }}
+                    />
+                    <label htmlFor="accept-pre-order-terms">
+                      Please agree with the terms and conditions of PRE-ORDER
+                      item(s) in your order
+                    </label>
+                  </Box>
+                )}
                 <Box sx={{ textAlign: 'right' }} mt={4}>
                   {checkoutInProcess && <Spinner />}
                   {!checkoutInProcess && isCheckoutAllowed() && (
@@ -322,6 +362,7 @@ export const pageQuery = graphql`
           slug
           weight
           price
+          status
           images {
             fluid {
               ...GatsbyContentfulFluid_withWebp

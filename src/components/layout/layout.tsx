@@ -46,6 +46,9 @@ const Layout: React.FC<LayoutProps> = ({ children, page, theme = 'black' }) => {
           .react-images__view-image {
             max-height: 90vh !important;
           }
+          ul li div {
+            margin: 0 !important;
+          }
         `}
       />
       <Helmet>
