@@ -19,21 +19,16 @@ exports.createPages = ({ graphql, actions }) => {
   const { createPage } = actions;
 
   return new Promise((resolve, reject) => {
-    const productTemplate = path.resolve('./src/templates/product.tsx');
-    const genericPageTemplate = path.resolve(
-      './src/templates/generic-page.tsx',
-    );
-
     resolve(
       graphql(
         `
           {
-            allContentfulGallery {
+            allContentfulProduct {
               nodes {
                 slug
               }
             }
-            allContentfulProduct {
+            allContentfulProject {
               nodes {
                 slug
               }
@@ -51,6 +46,7 @@ exports.createPages = ({ graphql, actions }) => {
           reject(result.errors);
         }
 
+        const productTemplate = path.resolve('./src/templates/product.tsx');
         const products = result.data.allContentfulProduct.nodes;
         products.forEach(({ slug }) => {
           createPage({
@@ -62,6 +58,21 @@ exports.createPages = ({ graphql, actions }) => {
           });
         });
 
+        const projectTemplate = path.resolve('./src/templates/project.tsx');
+        const projects = result.data.allContentfulProject.nodes;
+        projects.forEach(({ slug }) => {
+          createPage({
+            path: `/projects/${slug}/`,
+            component: projectTemplate,
+            context: {
+              slug,
+            },
+          });
+        });
+
+        const genericPageTemplate = path.resolve(
+          './src/templates/generic-page.tsx',
+        );
         const pages = result.data.allContentfulPage.nodes;
         pages.forEach(({ slug }) => {
           if (!fs.existsSync(`./src/pages/${slug}.tsx`) && slug !== 'home') {

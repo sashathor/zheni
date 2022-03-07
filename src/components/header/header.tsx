@@ -23,7 +23,7 @@ const Header: React.FC<HeaderProps> = ({ theme }) => {
         }}
       >
         <Box sx={{ textAlign: ['center', 'left'] }}>
-          <Link to="/" sx={{ display: 'inline-block' }}>
+          <Link to="/" sx={{ display: 'inline-block', marginLeft: [0, -34] }}>
             <Image
               sx={{
                 width: '20vw',
@@ -36,7 +36,7 @@ const Header: React.FC<HeaderProps> = ({ theme }) => {
             />
           </Link>
         </Box>
-        <Box sx={{ pr: [0, 4] }}>
+        <Box>
           <Navigation theme={theme} />
         </Box>
       </Flex>

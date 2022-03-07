@@ -31,6 +31,17 @@ export type Product = {
   };
 };
 
+export type Project = {
+  id: string;
+  slug: string;
+  title: string;
+  description?: {
+    json: any;
+    references: any;
+  };
+  featuredImage: ImageType;
+};
+
 export type DeliveryType = {
   price: number;
   days: number;
