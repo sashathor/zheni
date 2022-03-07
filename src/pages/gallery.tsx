@@ -24,12 +24,8 @@ interface GalleryPageProps {
   };
 }
 
-const GalleryPage: React.FC<GalleryPageProps> = ({
-  data: {
-    page,
-    page: { content, images },
-  },
-}) => {
+const GalleryPage: React.FC<GalleryPageProps> = ({ data: { page } }) => {
+  const { content, images } = page ?? {};
   const imageSources = images
     ?.filter(({ fluid }) => fluid)
     .map(({ fluid }) => ({
@@ -66,7 +62,7 @@ const GalleryPage: React.FC<GalleryPageProps> = ({
 export default GalleryPage;
 
 export const pageQuery = graphql`
-  query($slug: String) {
+  query ($slug: String) {
     page: contentfulPage(slug: { eq: $slug }) {
       ...PageData
       images {
