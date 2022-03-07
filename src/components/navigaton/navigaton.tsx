@@ -26,8 +26,9 @@ const NavLink = styled(Link)`
 `;
 
 const PAGES: { slug: string; title?: string }[] = [
-  { slug: 'gallery' },
+  // { slug: 'gallery' },
   { slug: 'about' },
+  { slug: 'projects' },
   { slug: 'contact' },
   { slug: 'shop' },
   { slug: 'cart' },
@@ -40,7 +41,7 @@ const Navigation = ({ theme }: { theme: Theme }) => {
     <nav role="navigation">
       <Flex
         sx={{
-          margin: ['0 3vw', '3vh 0 10vh 40px'],
+          margin: ['0 0 3vh 0', '3vh 0 5vh 40px'],
           justifyContent: ['center', 'flex-end'],
           flexWrap: ['wrap', 'unset'],
           alignItems: 'baseline',

@@ -66,8 +66,8 @@ const Layout: React.FC<LayoutProps> = ({ children, page, theme = 'black' }) => {
           flexDirection: 'column',
         }}
       >
-        <Header theme={theme} />
         <LayoutContainer sx={{ flex: '1 1 auto' }}>
+          <Header theme={theme} />
           <main sx={{}}>{children}</main>
         </LayoutContainer>
         {theme !== 'white' && (
