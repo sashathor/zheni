@@ -28,6 +28,11 @@ if (!spaceId || !accessToken) {
 }
 
 module.exports = {
+  siteMetadata: {
+    title: 'Zheni Studio',
+    description: 'Handmade ceramics by Zheni. Unique pottery, tableware, and art objects.',
+    siteUrl: 'https://zheni.studio',
+  },
   pathPrefix: '/zheni',
   plugins: [
     'gatsby-transformer-remark',
@@ -73,6 +78,22 @@ module.exports = {
         pages: path.join(__dirname, 'src/pages'),
         templates: path.join(__dirname, 'src/templates'),
         utils: path.join(__dirname, 'src/utils'),
+      },
+    },
+    {
+      resolve: 'gatsby-plugin-canonical-urls',
+      options: {
+        siteUrl: 'https://zheni.studio',
+      },
+    },
+    {
+      resolve: 'gatsby-plugin-sitemap',
+      options: {
+        excludes: [
+          '/cart/',
+          '/order-confirmed/',
+          '/shop/product/test*',
+        ],
       },
     },
   ],

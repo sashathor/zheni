@@ -79,7 +79,35 @@ const ProductTemplate: React.FC<ProductTemplateProps> = ({
     );
 
   return (
-    <Layout page={{ meta_title: title, content: { json: [] } }}>
+    <Layout page={{ meta_title: title, meta_description: `${title} — handmade ceramic piece by Zheni Studio`, content: { json: [] } }}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Product',
+            name: title,
+            description: `${title} — handmade ceramic piece by Zheni Studio`,
+            image: productImages?.[0] ? getSrc(productImages[0]) : undefined,
+            brand: {
+              '@type': 'Brand',
+              name: 'Zheni Studio',
+            },
+            ...(price && !isOnRequest
+              ? {
+                  offers: {
+                    '@type': 'Offer',
+                    price: (price / 100).toFixed(2),
+                    priceCurrency: 'EUR',
+                    availability: active
+                      ? 'https://schema.org/InStock'
+                      : 'https://schema.org/SoldOut',
+                  },
+                }
+              : {}),
+          }),
+        }}
+      />
       <Grid gap={[4, 5]} columns={[1, 2]}>
         <Box>
           <AspectRatio ratio={3 / 4}>
