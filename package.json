@@ -65,5 +65,12 @@
     "prettier": "^3.3.0",
     "typescript": "^5.5.0"
   },
-  "packageManager": "pnpm@9.15.0"
+  "packageManager": "pnpm@9.15.0",
+  "pnpm": {
+    "overrides": {
+      "immutable": "^4.3.0",
+      "serialize-javascript": "^6.0.2",
+      "node-fetch": "^2.7.0"
+    }
+  }
 }
