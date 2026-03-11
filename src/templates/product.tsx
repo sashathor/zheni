@@ -2,7 +2,7 @@
 
 import { Fragment } from 'react';
 import { graphql } from 'gatsby';
-import Image from 'gatsby-image';
+import { GatsbyImage, getSrc } from 'gatsby-plugin-image';
 import {
   Box,
   Button,
@@ -56,9 +56,9 @@ const ProductTemplate: React.FC<ProductTemplateProps> = ({
     },
   },
 }) => {
-  const productImages = images?.filter(({ fluid }) => fluid);
-  const imageSources = productImages?.map(({ fluid }) => ({
-    source: fluid?.src,
+  const productImages = images?.filter(({ gatsbyImageData }) => gatsbyImageData);
+  const imageSources = productImages?.map((img) => ({
+    source: getSrc(img),
   }));
   const carousel = useCarousel();
 
@@ -84,10 +84,11 @@ const ProductTemplate: React.FC<ProductTemplateProps> = ({
         <Box>
           <AspectRatio ratio={3 / 4}>
             <Link href="#" onClick={carousel.toggle(0)}>
-              <Image
-                fluid={{ ...productImages[0].fluid, aspectRatio: 3 / 4 }}
-                alt={productImages[0].title}
-                fadeIn
+              <GatsbyImage
+                image={productImages[0].gatsbyImageData}
+                alt={productImages[0].title || ''}
+                objectFit="cover"
+                style={{ height: '100%', width: '100%' }}
               />
             </Link>
           </AspectRatio>
@@ -96,12 +97,13 @@ const ProductTemplate: React.FC<ProductTemplateProps> = ({
               {productImages
                 .filter((image, idx) => idx > 0)
                 .map((image, idx) => (
-                  <Box key={idx}>
+                  <Box key={idx} sx={{ aspectRatio: '3/4', overflow: 'hidden' }}>
                     <Link href="#" onClick={carousel.toggle(idx + 1)}>
-                      <Image
-                        fluid={{ ...image.fluid, aspectRatio: 3 / 4 }}
-                        alt={image.title}
-                        fadeIn
+                      <GatsbyImage
+                        image={image.gatsbyImageData}
+                        alt={image.title || ''}
+                        objectFit="cover"
+                        style={{ height: '100%', width: '100%' }}
                       />
                     </Link>
                   </Box>
@@ -171,9 +173,7 @@ export const pageQuery = graphql`
       images {
         id
         title
-        fluid(maxWidth: 1200, quality: 90) {
-          ...GatsbyContentfulFluid_withWebp
-        }
+        gatsbyImageData(width: 1200, placeholder: BLURRED, formats: [AUTO, WEBP], quality: 90)
       }
     }
   }

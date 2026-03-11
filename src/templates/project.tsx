@@ -1,7 +1,7 @@
 /** @jsx jsx */
 
 import { graphql } from 'gatsby';
-import Image from 'gatsby-image';
+import { GatsbyImage } from 'gatsby-plugin-image';
 import { Box, Text, jsx } from 'theme-ui';
 import { Layout } from 'components';
 import { jsonToHTML } from 'utils';
@@ -28,11 +28,14 @@ const ProjectTemplate: React.FC<ProjectTemplateProps> = ({
       <Box mb={3}>
         <Text variant="text.upperCase">{title}</Text>
       </Box>
-      <Image
-        fluid={{ ...featuredImage.fluid, aspectRatio: 4.5 / 2 }}
-        alt={featuredImage.title}
-        fadeIn
-      />
+      <Box sx={{ aspectRatio: '4.5 / 2', overflow: 'hidden' }}>
+        <GatsbyImage
+          image={featuredImage.gatsbyImageData}
+          alt={featuredImage.title || ''}
+          objectFit="cover"
+          style={{ height: '100%', width: '100%' }}
+        />
+      </Box>
       <Box mt={4}>{jsonToHTML(description?.json, description?.references)}</Box>
     </Box>
   </Layout>
@@ -47,9 +50,7 @@ export const pageQuery = graphql`
       slug
       featuredImage {
         title
-        fluid {
-          ...GatsbyContentfulFluid_withWebp
-        }
+        gatsbyImageData(layout: FULL_WIDTH, placeholder: BLURRED, formats: [AUTO, WEBP])
       }
       description {
         json: raw
@@ -61,9 +62,7 @@ export const pageQuery = graphql`
             file {
               url
             }
-            fluid {
-              ...GatsbyContentfulFluid_withWebp
-            }
+            gatsbyImageData(layout: FULL_WIDTH, placeholder: BLURRED, formats: [AUTO, WEBP])
           }
         }
       }

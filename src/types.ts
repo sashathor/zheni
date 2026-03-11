@@ -1,4 +1,4 @@
-import { FluidObject } from 'gatsby-image';
+import { IGatsbyImageData } from 'gatsby-plugin-image';
 
 export type Theme = 'white' | 'black';
 
@@ -6,7 +6,7 @@ export type Image = {
   id?: string;
   title?: string;
   description?: string;
-  fluid: FluidObject;
+  gatsbyImageData: IGatsbyImageData;
 };
 
 export interface PageData {
@@ -39,7 +39,7 @@ export type Project = {
     json: any;
     references: any;
   };
-  featuredImage: ImageType;
+  featuredImage: Image;
 };
 
 export type DeliveryType = {

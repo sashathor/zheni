@@ -6,15 +6,11 @@ const useSmallLogo = (theme: Theme) => {
     query {
       logoWhiteSmall: contentfulAsset(title: { eq: "logo-white-small" }) {
         description
-        fluid {
-          ...GatsbyContentfulFluid_withWebp
-        }
+        gatsbyImageData(width: 100, placeholder: BLURRED, formats: [AUTO, WEBP])
       }
       logoBlackSmall: contentfulAsset(title: { eq: "logo-black-small" }) {
         description
-        fluid {
-          ...GatsbyContentfulFluid_withWebp
-        }
+        gatsbyImageData(width: 100, placeholder: BLURRED, formats: [AUTO, WEBP])
       }
     }
   `);

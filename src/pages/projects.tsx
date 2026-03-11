@@ -3,7 +3,7 @@
 import { graphql } from 'gatsby';
 import { Flex, Box, Text, Link as A, jsx } from 'theme-ui';
 import { Link } from 'gatsby';
-import Image from 'gatsby-image';
+import { GatsbyImage } from 'gatsby-plugin-image';
 import { Layout } from 'components';
 import { jsonToHTML } from 'utils';
 import { PageData, Image as ImageType, Project } from 'types';
@@ -42,11 +42,14 @@ const ProjectsPage: React.FC<ProjectsPageProps> = ({
             <Text variant="text.upperCase">{title}</Text>
           </Box>
           <Box sx={{ flexGrow: 1 }}>
-            <Image
-              fluid={{ ...featuredImage.fluid, aspectRatio: 4.5 / 2 }}
-              alt={featuredImage.title}
-              fadeIn
-            />
+            <Box sx={{ aspectRatio: '4.5 / 2', overflow: 'hidden' }}>
+              <GatsbyImage
+                image={featuredImage.gatsbyImageData}
+                alt={featuredImage.title || ''}
+                objectFit="cover"
+                style={{ height: '100%', width: '100%' }}
+              />
+            </Box>
           </Box>
         </Flex>
       </A>
@@ -63,16 +66,14 @@ export default ProjectsPage;
 
 export const pageQuery = graphql`
   query ($slug: String) {
-    allContentfulProject(sort: { fields: updatedAt, order: DESC }) {
+    allContentfulProject(sort: { updatedAt: DESC }) {
       projects: nodes {
         id
         title
         slug
         featuredImage {
           title
-          fluid {
-            ...GatsbyContentfulFluid_withWebp
-          }
+          gatsbyImageData(layout: FULL_WIDTH, placeholder: BLURRED, formats: [AUTO, WEBP])
         }
       }
     }
@@ -81,9 +82,7 @@ export const pageQuery = graphql`
       images {
         id
         description
-        fluid {
-          ...GatsbyContentfulFluid_withWebp
-        }
+        gatsbyImageData(layout: FULL_WIDTH, placeholder: BLURRED, formats: [AUTO, WEBP])
       }
     }
   }

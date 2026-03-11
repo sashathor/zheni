@@ -2,7 +2,7 @@
 
 import { Fragment } from 'react';
 import { graphql } from 'gatsby';
-import BackgroundImage from 'gatsby-background-image';
+import { GatsbyImage } from 'gatsby-plugin-image';
 import { Link } from 'gatsby';
 import styled from '@emotion/styled';
 import { AspectRatio, Heading, Box, Grid, jsx } from 'theme-ui';
@@ -26,9 +26,6 @@ const ProductLink = styled(Link)`
     span {
       padding-top: 0;
       display: block;
-      /* white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis; */
     }
   }
 
@@ -50,9 +47,6 @@ const ProductLink = styled(Link)`
       span {
         display: block;
         padding-top: 45%;
-        /* white-space: normal;
-        overflow: visible;
-        text-overflow: initial; */
       }
     }
 
@@ -132,14 +126,13 @@ const ShopPage: React.FC<ShopPageProps> = ({
                   }) => (
                     <AspectRatio key={id} ratio={3 / 4}>
                       <ProductLink to={`/shop/product/${slug}`}>
-                        <BackgroundImage
-                          fluid={images[0].fluid}
-                          Tag="section"
-                          fadeIn="soft"
-                          sx={{ height: '100%' }}
-                          alt={images[0].title}
-                        >
-                          <div className="details">
+                        <div style={{ position: 'relative', height: '100%' }}>
+                          <GatsbyImage
+                            image={images[0].gatsbyImageData}
+                            alt={images[0].title || title}
+                            style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+                          />
+                          <div className="details" style={{ position: 'relative', zIndex: 1 }}>
                             <span title={title}>{title}</span>
                             {status === 'OnRequest' && <p>Price on request</p>}
                             {status !== 'OnRequest' && (
@@ -152,7 +145,7 @@ const ShopPage: React.FC<ShopPageProps> = ({
                               </Fragment>
                             )}
                           </div>
-                        </BackgroundImage>
+                        </div>
                       </ProductLink>
                     </AspectRatio>
                   ),
@@ -171,16 +164,16 @@ export const pageQuery = graphql`
     page: contentfulPage(slug: { eq: $slug }) {
       ...PageData
     }
-    allContentfulCategory(sort: { fields: updatedAt, order: DESC }) {
+    allContentfulCategory(sort: { updatedAt: DESC }) {
       categories: nodes {
         title
         id
       }
     }
     allStripeProduct(
-      sort: { order: DESC, fields: productContentful___updatedAt }
+      sort: { productContentful: { updatedAt: DESC } }
     ) {
-      productCategories: group(field: productContentful___category___id) {
+      productCategories: group(field: { productContentful: { category: { id: SELECT } } }) {
         fieldValue
         products: nodes {
           id
@@ -192,9 +185,7 @@ export const pageQuery = graphql`
             price
             images {
               title
-              fluid {
-                ...GatsbyContentfulFluid_withWebp
-              }
+              gatsbyImageData(layout: FULL_WIDTH, placeholder: BLURRED, formats: [AUTO, WEBP])
             }
           }
         }

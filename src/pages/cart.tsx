@@ -2,7 +2,7 @@
 
 import { Fragment, useState, useCallback, useMemo } from 'react';
 import { graphql } from 'gatsby';
-import Image from 'gatsby-image';
+import { GatsbyImage } from 'gatsby-plugin-image';
 import { Link } from 'gatsby';
 import {
   Alert,
@@ -214,13 +214,11 @@ const CartPage: React.FC<CartPageProps> = ({
                 <Box pl={[0, 4]} mb={[3, 0]} sx={{ position: 'relative' }}>
                   <RemoveButton onClick={() => removeFromCart({ id })} />
                   <Link to={`/shop/product/${slug}`}>
-                    <Image
-                      fluid={images[0].fluid}
+                    <GatsbyImage
+                      image={images[0].gatsbyImageData}
                       alt={title}
-                      fadeIn
-                      className="img"
-                      sx={{
-                        maxHeight: ['40vh', 'auto'],
+                      style={{
+                        maxHeight: '40vh',
                         opacity: active ? 1 : 0.4,
                       }}
                     />
@@ -353,7 +351,7 @@ export const pageQuery = graphql`
       ...PageData
     }
     allStripeProduct(
-      sort: { order: DESC, fields: productContentful___updatedAt }
+      sort: { productContentful: { updatedAt: DESC } }
     ) {
       products: nodes {
         id
@@ -364,9 +362,7 @@ export const pageQuery = graphql`
           price
           status
           images {
-            fluid {
-              ...GatsbyContentfulFluid_withWebp
-            }
+            gatsbyImageData(layout: FULL_WIDTH, placeholder: BLURRED, formats: [AUTO, WEBP])
           }
         }
       }
