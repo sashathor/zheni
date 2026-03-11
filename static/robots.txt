@@ -1,2 +1,7 @@
 User-agent: *
-Disallow:
+Allow: /
+
+Disallow: /cart/
+Disallow: /order-confirmed/
+
+Sitemap: https://zheni.studio/sitemap-index.xml
