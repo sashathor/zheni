@@ -1,8 +1,7 @@
 /** @jsx jsx */
 
 import { ReactNode } from 'react';
-import axios from 'axios';
-import Image from 'gatsby-image';
+import { GatsbyImage } from 'gatsby-plugin-image';
 import {
   BLOCKS,
   MARKS,
@@ -61,16 +60,15 @@ const jsonToHTML = (document: Document, assets: any) => {
           img = assets.find((asset: any) => asset.contentful_id === imgId);
         }
 
-        if (!img) {
+        if (!img || !img.gatsbyImageData) {
           return null;
         }
 
         return (
-          <Image
-            fluid={{ ...img.fluid }}
-            sx={img.description ? JSON.parse(img.description) : undefined}
+          <GatsbyImage
+            image={img.gatsbyImageData}
+            style={img.description ? JSON.parse(img.description) : undefined}
             alt={img.title}
-            fadeIn
           />
         );
       },

@@ -1,4 +1,4 @@
-import React, { Dispatch, createContext, useReducer } from 'react';
+import React, { Dispatch, PropsWithChildren, createContext, useReducer } from 'react';
 import { ShoppingCart, Store, Action } from 'types';
 
 const getShoppingCartFromLocalStorage = (): string | null =>
@@ -55,7 +55,7 @@ const ShopContext = createContext<{
   dispatch: () => null,
 });
 
-const ShopContextProvider: React.FC = ({ children }) => {
+const ShopContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [state, dispatch] = useReducer(shopReducer, shopContextValues);
   return (
     <ShopContext.Provider value={{ state, dispatch }}>

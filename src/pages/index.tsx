@@ -1,27 +1,26 @@
 /** @jsx jsx */
 
 import { graphql } from 'gatsby';
+import { GatsbyImage, IGatsbyImageData, getSrc } from 'gatsby-plugin-image';
 import { css } from '@emotion/react';
 import { Flex, jsx } from 'theme-ui';
-import BackgroundImage from 'gatsby-background-image';
-import Image, { FluidObject } from 'gatsby-image';
 import { PageData } from 'types';
 import { Layout } from 'components';
 
 type FeaturedLogo = {
   id: string;
   description: string;
-  fluid: FluidObject;
+  gatsbyImageData: IGatsbyImageData;
 };
 
 interface HomePageProps {
   data: {
     page: PageData;
     bgImage: {
-      fluid: FluidObject;
+      gatsbyImageData: IGatsbyImageData;
     };
     logoWhiteBig: {
-      fluid: FluidObject;
+      gatsbyImageData: IGatsbyImageData;
     };
     allContentfulAsset: {
       featuredLogos: FeaturedLogo[];
@@ -38,27 +37,24 @@ const HomePage: React.FC<HomePageProps> = ({
   },
 }) => (
   <Layout page={page} theme="white">
-    <BackgroundImage
-      Tag="div"
-      fluid={bgImage.fluid}
-      fadeIn="soft"
-      preserveStackingContext
-      css={css`
-        position: fixed !important;
-        top: 0px;
-        left: 0px;
-        z-index: -1;
-        width: 100vw;
-        min-height: 100vh;
-        height: 100%;
-      `}
+    <GatsbyImage
+      image={bgImage.gatsbyImageData}
+      alt=""
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        zIndex: -1,
+        width: '100vw',
+        minHeight: '100vh',
+        height: '100%',
+      }}
     />
-    <Image
-      fluid={logoWhiteBig.fluid}
+    <GatsbyImage
+      image={logoWhiteBig.gatsbyImageData}
       alt="Zheni"
-      fadeIn
-      sx={{
-        position: 'absolute !important',
+      style={{
+        position: 'absolute',
         width: '50%',
         margin: 'auto',
         top: '40%',
@@ -79,7 +75,7 @@ const HomePage: React.FC<HomePageProps> = ({
       }}
     >
       {featuredLogos &&
-        featuredLogos.map((featuredLogo, index) => (
+        featuredLogos.map((featuredLogo) => (
           <Flex
             key={featuredLogo.id}
             sx={{
@@ -91,13 +87,11 @@ const HomePage: React.FC<HomePageProps> = ({
               maxWidth: 100,
             }}
           >
-            <Image
-              fluid={{ ...featuredLogo.fluid, aspectRatio: 4 / 3 }}
-              imgStyle={{ objectFit: 'contain' }}
+            <GatsbyImage
+              image={featuredLogo.gatsbyImageData}
+              objectFit="contain"
               style={{ height: '100%', width: '100%' }}
               alt={featuredLogo.description}
-              title={featuredLogo.description}
-              fadeIn
             />
           </Flex>
         ))}
@@ -118,9 +112,7 @@ export const pageQuery = graphql`
     images {
       id
       title
-      fluid {
-        ...GatsbyContentfulFluid_withWebp
-      }
+      gatsbyImageData(layout: FULL_WIDTH, placeholder: BLURRED, formats: [AUTO, WEBP])
     }
   }
   query($slug: String!) {
@@ -128,22 +120,16 @@ export const pageQuery = graphql`
       ...PageData
     }
     bgImage: contentfulAsset(title: { eq: "home-bg" }) {
-      fluid(maxWidth: 1000, quality: 90) {
-        ...GatsbyContentfulFluid_withWebp
-      }
+      gatsbyImageData(layout: FULL_WIDTH, placeholder: BLURRED, formats: [AUTO, WEBP], quality: 90)
     }
     logoWhiteBig: contentfulAsset(title: { eq: "logo-white-big" }) {
-      fluid {
-        ...GatsbyContentfulFluid_withWebp
-      }
+      gatsbyImageData(layout: FULL_WIDTH, placeholder: BLURRED, formats: [AUTO, WEBP])
     }
     allContentfulAsset(filter: { title: { eq: "featured-logo" } }) {
       featuredLogos: nodes {
         id
         description
-        fluid(maxWidth: 100, maxHeight: 100) {
-          ...GatsbyContentfulFluid_withWebp
-        }
+        gatsbyImageData(width: 100, placeholder: BLURRED, formats: [AUTO, WEBP])
       }
     }
   }

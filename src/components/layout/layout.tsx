@@ -1,6 +1,6 @@
 /** @jsx jsx */
 
-import { Fragment } from 'react';
+import { Fragment, PropsWithChildren } from 'react';
 import { Helmet } from 'react-helmet';
 import { Global, css } from '@emotion/react';
 import styled from '@emotion/styled';
@@ -20,7 +20,7 @@ interface LayoutProps {
   theme?: Theme;
 }
 
-const Layout: React.FC<LayoutProps> = ({ children, page, theme = 'black' }) => {
+const Layout: React.FC<PropsWithChildren<LayoutProps>> = ({ children, page, theme = 'black' }) => {
   const { meta_title, meta_description } = page
     ? page
     : {

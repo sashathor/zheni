@@ -1,7 +1,7 @@
 /** @jsx jsx */
 
 import { Link } from 'gatsby';
-import Image from 'gatsby-image';
+import { GatsbyImage } from 'gatsby-plugin-image';
 import { jsx, Flex, Box } from 'theme-ui';
 import { useSmallLogo } from 'hooks';
 import { Theme } from 'types';
@@ -24,15 +24,14 @@ const Header: React.FC<HeaderProps> = ({ theme }) => {
       >
         <Box sx={{ textAlign: ['center', 'left'] }}>
           <Link to="/" sx={{ display: 'inline-block', marginLeft: [0, -34] }}>
-            <Image
-              sx={{
+            <GatsbyImage
+              image={smallLogo.gatsbyImageData}
+              alt={smallLogo.description}
+              style={{
                 width: '20vw',
                 maxWidth: '100px',
                 minWidth: '50px',
               }}
-              fluid={smallLogo.fluid}
-              alt={smallLogo.description}
-              fadeIn
             />
           </Link>
         </Box>

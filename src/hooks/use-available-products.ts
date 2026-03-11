@@ -18,7 +18,7 @@ export const checkProductsAvailability = async (shoppingCart: ShoppingCart) => {
     );
     return checkedProductsData.data.response;
   } catch (e) {
-    return Promise.reject({ e });
+    throw e instanceof Error ? e : new Error('Failed to check products');
   }
 };
 
@@ -29,14 +29,18 @@ export const fetchAvailableProducts = async ({
   shoppingCart: ShoppingCart;
   dispatch: Dispatch<Action>;
 }) => {
-  const soldProducts: {
-    id: string;
-    status: string;
-  }[] = await checkProductsAvailability(shoppingCart);
-  const payload = shoppingCart.filter((id) =>
-    soldProducts.find((item) => item.id === id && item.status === 'active'),
-  );
-  dispatch(dispatchAvailableProducts(payload));
+  try {
+    const soldProducts: {
+      id: string;
+      status: string;
+    }[] = await checkProductsAvailability(shoppingCart);
+    const payload = shoppingCart.filter((id) =>
+      soldProducts.find((item) => item.id === id && item.status === 'active'),
+    );
+    dispatch(dispatchAvailableProducts(payload));
+  } catch (e) {
+    console.warn('Failed to check product availability:', e);
+  }
 };
 
 const useAvailableProducts = () => {

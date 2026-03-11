@@ -1,22 +1,12 @@
 /** @jsx jsx */
 
 import { graphql } from 'gatsby';
-import Image from 'gatsby-image';
+import { GatsbyImage, getSrc } from 'gatsby-plugin-image';
 import { Box, Heading, Link, jsx } from 'theme-ui';
-import styled from '@emotion/styled';
 import { Carousel, Layout } from 'components';
 import { useCarousel } from 'hooks';
 import { jsonToHTML } from 'utils';
 import { PageData } from 'types';
-
-const GalleryImage = styled(Image)`
-  filter: grayscale(100%);
-  margin-bottom: 32px;
-
-  &:hover {
-    filter: none;
-  }
-`;
 
 interface GalleryPageProps {
   data: {
@@ -27,9 +17,9 @@ interface GalleryPageProps {
 const GalleryPage: React.FC<GalleryPageProps> = ({ data: { page } }) => {
   const { content, images } = page ?? {};
   const imageSources = images
-    ?.filter(({ fluid }) => fluid)
-    .map(({ fluid }) => ({
-      source: fluid?.src,
+    ?.filter(({ gatsbyImageData }) => gatsbyImageData)
+    .map((img) => ({
+      source: getSrc(img),
     }));
   const carousel = useCarousel();
 
@@ -37,14 +27,19 @@ const GalleryPage: React.FC<GalleryPageProps> = ({ data: { page } }) => {
     <Layout page={page}>
       <Heading variant="text.pageTitle">Gallery</Heading>
       {images
-        ?.filter(({ fluid }) => fluid)
-        .map(({ id, fluid, description }, idx) => (
+        ?.filter(({ gatsbyImageData }) => gatsbyImageData)
+        .map(({ id, gatsbyImageData, description }, idx) => (
           <Link key={id} href="#" onClick={carousel.toggle(idx)}>
-            <Box>
-              <GalleryImage
-                fluid={{ ...fluid, aspectRatio: 3 / 4 }}
-                alt={description}
-                fadeIn
+            <Box
+              sx={{
+                filter: 'grayscale(100%)',
+                mb: '32px',
+                '&:hover': { filter: 'none' },
+              }}
+            >
+              <GatsbyImage
+                image={gatsbyImageData}
+                alt={description || ''}
               />
             </Box>
           </Link>
@@ -68,9 +63,7 @@ export const pageQuery = graphql`
       images {
         id
         description
-        fluid {
-          ...GatsbyContentfulFluid_withWebp
-        }
+        gatsbyImageData(layout: FULL_WIDTH, placeholder: BLURRED, formats: [AUTO, WEBP])
       }
     }
   }

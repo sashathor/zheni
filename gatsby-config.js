@@ -34,6 +34,7 @@ module.exports = {
     'gatsby-plugin-react-helmet',
     'gatsby-plugin-emotion',
     'gatsby-plugin-sharp',
+    'gatsby-plugin-image',
     'gatsby-plugin-theme-ui',
     {
       resolve: 'gatsby-source-contentful',
@@ -51,7 +52,7 @@ module.exports = {
       resolve: 'gatsby-plugin-google-fonts',
       options: {
         fonts: [
-          'roboto:300,300i,400,400i,500,500i,700,700i', // you can also specify font weights and styles
+          'roboto:300,300i,400,400i,500,500i,700,700i',
         ],
         display: 'swap',
       },

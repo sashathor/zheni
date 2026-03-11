@@ -1,12 +1,10 @@
-[Settings]
-  ID = "c544b2ba-1921-4703-aa92-230aaa4b8632"
+[build]
+  command = "pnpm build"
+  publish = "public"
+  functions = "functions"
 
-[Build]
-  Publish = "public"
-  Functions = "functions"
-
-[[plugins]]
-  package = "netlify-plugin-gatsby-cache"
+[build.environment]
+  NODE_VERSION = "22"
 
 [[plugins]]
   package = "@netlify/plugin-sitemap"
