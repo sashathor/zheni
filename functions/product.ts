@@ -35,8 +35,6 @@ const processProduct = async ({ id, title, active }: ProcessProduct) => {
   return await stripe.products.create({
     ...productFields,
     id,
-    type: 'good',
-    attributes: ['name'],
   });
 };
 

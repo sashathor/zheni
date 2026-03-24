@@ -18,8 +18,6 @@ const processDelivery = async () => {
     deliveryProduct = await stripe.products.create({
       name: 'Delivery',
       id: STRIPE_DELIVERY_PRODUCT,
-      type: 'good',
-      attributes: ['name', 'destination'],
     });
   }
 };
